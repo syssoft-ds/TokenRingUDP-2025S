@@ -1,0 +1,23 @@
+Bericht:
+
+Aufgabe 1:
+
+Das starten des Programms und der Verbindungsaufbau in einem lokalen Netzwerk war Problemlos. Hier wurde die Verbindung nur mit einem Gerät hergestellt und
+es wurden zuverlässig Pakete zwischen den verschiedenen Instanzen ausgetauscht.
+
+Aufgabe 2: Die Verbindung zwischen den Parteien verlief leider nicht Problemlos. Zuallererst war es notwendig die Verbindung über die VPN der
+Universität Trier durchzuführen, da wir uns sonst nicht im selben LAN befinden würden.
+
+Darüber hinaus brach der Ring frühzeitig ab, siehe hier:
+
+C:\Users\danie\IdeaProjects\TokenRingUDP-2025S>java -jar TokenRingUDP.jar 136.199.4.18 57374
+UDP endpoint is (136.199.4.32, 51660)
+Sending {"sequence":0,"ring":[{"ip":"136.199.4.32","port":51660}]} to 136.199.4.18:57374
+Received {"sequence":2,"ring":[{"ip":"192.168.188.119","port":57374},{"ip":"136.199.4.32","port":51660}]} from 136.199.4.18:57374
+Token: seq=2, #members=2 (192.168.188.119, 57374) (136.199.4.32, 51660)
+Sending {"sequence":3,"ring":[{"ip":"136.199.4.32","port":51660},{"ip":"192.168.188.119","port":57374}]} to 192.168.188.119:57374
+
+Dies spiegelt sich auch im Wireshark-Verlauf wieder.
+
+Aufgabe 3 befindet sich im Repository in Form von .pcapng Dateien.
+Die Ansicht ist gefiltert und beinhaltet nur die Kommunikation des Tokenrings.
