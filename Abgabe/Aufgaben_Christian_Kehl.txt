@@ -1,0 +1,121 @@
+# Token Ring UDP - Hausaufgabe
+
+## Aufgabe 1: Lokaler Token Ring
+- Start über IntelliJ
+- 3 Teilnehmer erfolgreich verbunden.
+	* LeaderInstanz ohne Argumente gestartet und weitere Instanzen mit gleicher IP und entsprechenden Ports
+- Ablauf dokumentiert im Konsolenoutput.
+- Konsolenoutput als Ring_Leader:
+	UDP endpoint is (192.168.178.40, 51535)
+	Received {"sequence":0,"ring":[{"ip":"192.168.178.40","port":59676}]} from 192.168.178.40:59676
+	Token: seq=0, #members=1 (192.168.178.40, 59676)
+	Sending {"sequence":1,"ring":[{"ip":"192.168.178.40","port":59676},{"ip":"192.168.178.40","port":51535}]} to 192.168.178.40:51535
+	Received {"sequence":1,"ring":[{"ip":"192.168.178.40","port":59676},{"ip":"192.168.178.40","port":51535}]} from 192.168.178.40:51535
+	Token: seq=1, #members=2 (192.168.178.40, 59676) (192.168.178.40, 51535)
+	Sending {"sequence":2,"ring":[{"ip":"192.168.178.40","port":51535},{"ip":"192.168.178.40","port":59676}]} to 192.168.178.40:59676
+	Received {"sequence":3,"ring":[{"ip":"192.168.178.40","port":59676},{"ip":"192.168.178.40","port":51535}]} from 192.168.178.40:59676
+	Token: seq=3, #members=2 (192.168.178.40, 59676) (192.168.178.40, 51535)
+	Sending {"sequence":4,"ring":[{"ip":"192.168.178.40","port":51535},{"ip":"192.168.178.40","port":59676}]} to 192.168.178.40:59676
+	Received {"sequence":5,"ring":[{"ip":"192.168.178.40","port":59676},{"ip":"192.168.178.40","port":51535}]} from 192.168.178.40:59676
+	...
+	Token: seq=11, #members=2 (192.168.178.40, 59676) (192.168.178.40, 51535)
+	Sending {"sequence":12,"ring":[{"ip":"192.168.178.40","port":51535},{"ip":"192.168.178.40","port":59676}]} to 192.168.178.40:59676
+	Received {"sequence":13,"ring":[{"ip":"192.168.178.40","port":59676},{"ip":"192.168.178.40","port":60335},{"ip":"192.168.178.40","port":51535}]} from 192.168.178.40:59676
+	Token: seq=13, #members=3 (192.168.178.40, 59676) (192.168.178.40, 60335) (192.168.178.40, 51535)
+	Sending {"sequence":14,"ring":[{"ip":"192.168.178.40","port":60335},{"ip":"192.168.178.40","port":51535},{"ip":"192.168.178.40","port":59676}]} to 192.168.178.40:59676
+	Received {"sequence":16,"ring":[{"ip":"192.168.178.40","port":59676},{"ip":"192.168.178.40","port":60335},{"ip":"192.168.178.40","port":51535}]} from 192.168.178.40:60335
+	Token: seq=16, #members=3 (192.168.178.40, 59676) (192.168.178.40, 60335) (192.168.178.40, 51535)
+	Sending {"sequence":17,"ring":[{"ip":"192.168.178.40","port":60335},{"ip":"192.168.178.40","port":51535},{"ip":"192.168.178.40","port":59676}]} to 192.168.178.40:59676
+	Received {"sequence":19,"ring":[{"ip":"192.168.178.40","port":59676},{"ip":"192.168.178.40","port":60335},{"ip":"192.168.178.40","port":51535}]} from 192.168.178.40:60335
+	Token: seq=19, #members=3 (192.168.178.40, 59676) (192.168.178.40, 60335) (192.168.178.40, 51535)
+	Sending {"sequence":20,"ring":[{"ip":"192.168.178.40","port":60335},{"ip":"192.168.178.40","port":51535},{"ip":"192.168.178.40","port":59676}]} to 192.168.178.40:59676
+	Received {"sequence":22,"ring":[{"ip":"192.168.178.40","port":59676},{"ip":"192.168.178.40","port":60335},{"ip":"192.168.178.40","port":51535}]} from 192.168.178.40:60335
+	Token: seq=22, #members=3 (192.168.178.40, 59676) (192.168.178.40, 60335) (192.168.178.40, 51535)
+	Sending {"sequence":23,"ring":[{"ip":"192.168.178.40","port":60335},{"ip":"192.168.178.40","port":51535},{"ip":"192.168.178.40","port":59676}]} to 192.168.178.40:59676
+	Received {"sequence":25,"ring":[{"ip":"192.168.178.40","port":59676},{"ip":"192.168.178.40","port":60335},{"ip":"192.168.178.40","port":51535}]} from 192.168.178.40:60335
+	Token: seq=25, #members=3 (192.168.178.40, 59676) (192.168.178.40, 60335) (192.168.178.40, 51535)
+	Sending {"sequence":26,"ring":[{"ip":"192.168.178.40","port":60335},{"ip":"192.168.178.40","port":51535},{"ip":"192.168.178.40","port":59676}]} to 192.168.178.40:59676
+	Received {"sequence":28,"ring":[{"ip":"192.168.178.40","port":59676},{"ip":"192.168.178.40","port":60335},{"ip":"192.168.178.40","port":51535}]} from 192.168.178.40:60335
+	...
+
+
+## Aufgabe 2: VPN-Ring mit Kommilitone
+- Teilnehmer: 2
+- Verbindung über UniTrier-VPN
+- zwei Abläufe: einmal als Ring_Leader und einmal als Ring_Member
+
+- Konsolenoutput als Ring_Leader:
+	UDP endpoint is (136.199.4.47, 57561)
+	Received {"sequence":0,"ring":[{"ip":"136.199.4.31","port":54053}]} from 136.199.4.31:54053
+	Token: seq=0, #members=1 (136.199.4.31, 54053)
+	Sending {"sequence":1,"ring":[{"ip":"136.199.4.31","port":54053},{"ip":"136.199.4.47","port":57561}]} to 136.199.4.47:57561
+	Received {"sequence":1,"ring":[{"ip":"136.199.4.31","port":54053},{"ip":"136.199.4.47","port":57561}]} from 136.199.4.47:57561
+	Token: seq=1, #members=2 (136.199.4.31, 54053) (136.199.4.47, 57561)
+	Sending {"sequence":2,"ring":[{"ip":"136.199.4.47","port":57561},{"ip":"136.199.4.31","port":54053}]} to 136.199.4.31:54053
+	Received {"sequence":3,"ring":[{"ip":"136.199.4.31","port":54053},{"ip":"136.199.4.47","port":57561}]} from 136.199.4.31:54053
+	Token: seq=3, #members=2 (136.199.4.31, 54053) (136.199.4.47, 57561)
+	Sending {"sequence":4,"ring":[{"ip":"136.199.4.47","port":57561},{"ip":"136.199.4.31","port":54053}]} to 136.199.4.31:54053
+	Received {"sequence":5,"ring":[{"ip":"136.199.4.31","port":54053},{"ip":"136.199.4.47","port":57561}]} from 136.199.4.31:54053
+	Token: seq=5, #members=2 (136.199.4.31, 54053) (136.199.4.47, 57561)
+	Sending {"sequence":6,"ring":[{"ip":"136.199.4.47","port":57561},{"ip":"136.199.4.31","port":54053}]} to 136.199.4.31:54053
+	Received {"sequence":7,"ring":[{"ip":"136.199.4.31","port":54053},{"ip":"136.199.4.47","port":57561}]} from 136.199.4.31:54053
+	Token: seq=7, #members=2 (136.199.4.31, 54053) (136.199.4.47, 57561)
+	Sending {"sequence":8,"ring":[{"ip":"136.199.4.47","port":57561},{"ip":"136.199.4.31","port":54053}]} to 136.199.4.31:54053
+	Received {"sequence":9,"ring":[{"ip":"136.199.4.31","port":54053},{"ip":"136.199.4.47","port":57561}]} from 136.199.4.31:54053
+	Token: seq=9, #members=2 (136.199.4.31, 54053) (136.199.4.47, 57561)
+	Sending {"sequence":10,"ring":[{"ip":"136.199.4.47","port":57561},{"ip":"136.199.4.31","port":54053}]} to 136.199.4.31:54053
+	Received {"sequence":11,"ring":[{"ip":"136.199.4.31","port":54053},{"ip":"136.199.4.47","port":57561}]} from 136.199.4.31:54053
+	Token: seq=11, #members=2 (136.199.4.31, 54053) (136.199.4.47, 57561)
+	Sending {"sequence":12,"ring":[{"ip":"136.199.4.47","port":57561},{"ip":"136.199.4.31","port":54053}]} to 136.199.4.31:54053
+	Received {"sequence":13,"ring":[{"ip":"136.199.4.31","port":54053},{"ip":"136.199.4.47","port":57561}]} from 136.199.4.31:54053
+	Token: seq=13, #members=2 (136.199.4.31, 54053) (136.199.4.47, 57561)
+	Sending {"sequence":14,"ring":[{"ip":"136.199.4.47","port":57561},{"ip":"136.199.4.31","port":54053}]} to 136.199.4.31:54053
+	Received {"sequence":15,"ring":[{"ip":"136.199.4.31","port":54053},{"ip":"136.199.4.47","port":57561}]} from 136.199.4.31:54053
+	Token: seq=15, #members=2 (136.199.4.31, 54053) (136.199.4.47, 57561)
+	Sending {"sequence":16,"ring":[{"ip":"136.199.4.47","port":57561},{"ip":"136.199.4.31","port":54053}]} to 136.199.4.31:54053
+	Received {"sequence":17,"ring":[{"ip":"136.199.4.31","port":54053},{"ip":"136.199.4.47","port":57561}]} from 136.199.4.31:54053
+	...
+	
+- Konsolenoutput als Ring_Member:
+	UDP endpoint is (136.199.4.47, 61248)
+	Sending {"sequence":0,"ring":[{"ip":"136.199.4.47","port":61248}]} to 136.199.4.31:58157
+	Received {"sequence":2,"ring":[{"ip":"136.199.4.31","port":58157},{"ip":"136.199.4.47","port":61248}]} from 136.199.4.31:58157
+	Token: seq=2, #members=2 (136.199.4.31, 58157) (136.199.4.47, 61248)
+	Sending {"sequence":3,"ring":[{"ip":"136.199.4.47","port":61248},{"ip":"136.199.4.31","port":58157}]} to 136.199.4.31:58157
+	Received {"sequence":4,"ring":[{"ip":"136.199.4.31","port":58157},{"ip":"136.199.4.47","port":61248}]} from 136.199.4.31:58157
+	Token: seq=4, #members=2 (136.199.4.31, 58157) (136.199.4.47, 61248)
+	Sending {"sequence":5,"ring":[{"ip":"136.199.4.47","port":61248},{"ip":"136.199.4.31","port":58157}]} to 136.199.4.31:58157
+	Received {"sequence":6,"ring":[{"ip":"136.199.4.31","port":58157},{"ip":"136.199.4.47","port":61248}]} from 136.199.4.31:58157
+	Token: seq=6, #members=2 (136.199.4.31, 58157) (136.199.4.47, 61248)
+	Sending {"sequence":7,"ring":[{"ip":"136.199.4.47","port":61248},{"ip":"136.199.4.31","port":58157}]} to 136.199.4.31:58157
+	Received {"sequence":8,"ring":[{"ip":"136.199.4.31","port":58157},{"ip":"136.199.4.47","port":61248}]} from 136.199.4.31:58157
+	Token: seq=8, #members=2 (136.199.4.31, 58157) (136.199.4.47, 61248)
+	Sending {"sequence":9,"ring":[{"ip":"136.199.4.47","port":61248},{"ip":"136.199.4.31","port":58157}]} to 136.199.4.31:58157
+	Received {"sequence":10,"ring":[{"ip":"136.199.4.31","port":58157},{"ip":"136.199.4.47","port":61248}]} from 136.199.4.31:58157
+	Token: seq=10, #members=2 (136.199.4.31, 58157) (136.199.4.47, 61248)
+	Sending {"sequence":11,"ring":[{"ip":"136.199.4.47","port":61248},{"ip":"136.199.4.31","port":58157}]} to 136.199.4.31:58157
+	Received {"sequence":12,"ring":[{"ip":"136.199.4.31","port":58157},{"ip":"136.199.4.47","port":61248}]} from 136.199.4.31:58157
+	Token: seq=12, #members=2 (136.199.4.31, 58157) (136.199.4.47, 61248)
+	Sending {"sequence":13,"ring":[{"ip":"136.199.4.47","port":61248},{"ip":"136.199.4.31","port":58157}]} to 136.199.4.31:58157
+	Received {"sequence":14,"ring":[{"ip":"136.199.4.31","port":58157},{"ip":"136.199.4.47","port":61248}]} from 136.199.4.31:58157
+	Token: seq=14, #members=2 (136.199.4.31, 58157) (136.199.4.47, 61248)
+	Sending {"sequence":15,"ring":[{"ip":"136.199.4.47","port":61248},{"ip":"136.199.4.31","port":58157}]} to 136.199.4.31:58157
+	Received {"sequence":16,"ring":[{"ip":"136.199.4.31","port":58157},{"ip":"136.199.4.47","port":61248}]} from 136.199.4.31:58157
+
+
+## Aufgabe 3: Wireshark
+- zu Aufgabe 1:
+	in beiliegender png "WireS_Aufgabe1" habe ich das Loopback Interface verwendet, da ich den Ring lokal laufen lassen sollte. Hier hab es soweit keine weiteren Probleme
+	
+- zu Aufgabe 2:
+	in beiliegender png "WireS_Aufgabe2" sieht man nur den Traffic zwischen meiner IP und der IP des UniServers 136.199.224.10, da ich hier das falsche Interface genutzt habe.
+	Ich habe hier mein Ethernet Interface genutzt, wobei ich allerdings ein eigenes UniVPN Interface auswählen hätte müssen. Da dies im späteren Verlauf erst aufgefallen ist,
+	habe ich leider keine passende Wireshark Ausgabe hierfür. Allerdings sieht man in meiner Lösung von Aufgabe 2 über den Konsolenoutput, dass die Verbindung und der TokenRing
+	korrekt funktioniert hat.
+	
+	in einem weiteren Anlauf haben wir es über das Internet probiert. Hier hatte es bei meinem Kommilitonen soweit mit dem Verschicken der Pakete alles funktioniert, allerdings
+	ist bei mir nichts angekommen. Nehaliegende Vermutung von uns war, dass es von der Firewall abgefangen wurde und wir zu Testzecken meinen Port forwarden hätten müssen.
+	Hier haben wir dann aber aufgehört, da es gewisse Risiken birgt und es sinngemäß nicht ganz gewollt ist, zumal wir eine funktionierende Verbindung über den UniVPN hatten.
+
+## Aufgabe 4: Git(Hub)
+- Branch-Name: ckehl
