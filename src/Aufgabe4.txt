@@ -1,0 +1,21 @@
+Aufgabe 2
+
+-Eine Instanz des Programms (erster Ring) wurde mit 'java TokenRing' gestartet.
+-Zwei weitere Teilnehmer die den Rechner im selben WLAN verbunden habe, traten mit 'java TokenRing IP PORT' bei
+-Die IP und Port wurden der Startausgabe entnommen und mitgeteilt.
+
+-Der Token ist erfolgreich im Ring gewandert.
+-Die Konsole auf der die erste Instanz gestartet wurde, zeigt alle Teilnehmer mit IP-Adresse und Port an.
+
+-Problem: Jeder PC musste dieselbe Java Version haben.
+
+Aufgabe 3
+
+- Wireshark auf einem der Teilnehmer gestartet.
+- Capture Filter: `udp`
+- Display Filter: `udp && frame contains "Token"`
+- Die Token-Nachrichten konnten identifiziert werden.
+
+- Der UDP-Verkehr war deutlich sichtbar.
+- Die Token-Nachrichten enthielten die Tokenringe und den Zähler (`seq`).
+- Die Pakete wurden zuverlässig übertragen (immer eine Sekunde).
