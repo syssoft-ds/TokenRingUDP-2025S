@@ -1,12 +1,17 @@
 import java.io.IOException;
 import java.net.*;
 import java.util.LinkedList;
-
+import java.util.HashMap;
+import java.util.Map;
 
 public class TokenRing {
 
-    private static void loop(DatagramSocket socket, String ip, int port, boolean first){
+    private static final long TIMEOUT = 3000; // 3 seconds timeout
+
+    private static void loop(DatagramSocket socket, String ip, int port, boolean first) {
         LinkedList<Token.Endpoint> candidates = new LinkedList<>();
+        Map<Token.Endpoint, Long> lastSeen = new HashMap<>(); // Track last seen times
+
         if (first) {
             candidates.add(new Token.Endpoint(ip, port));
         }
@@ -16,8 +21,24 @@ public class TokenRing {
                 System.out.printf("Token: seq=%d, #members=%d", rc.getSequence(), rc.length());
                 for (Token.Endpoint endpoint : rc.getRing()) {
                     System.out.printf(" (%s, %d)", endpoint.ip(), endpoint.port());
+                    lastSeen.put(endpoint, System.currentTimeMillis()); // Update last seen
                 }
                 System.out.println();
+
+                // Check for timeouts and remove failed nodes
+                LinkedList<Token.Endpoint> failedNodes = new LinkedList<>();
+                long currentTime = System.currentTimeMillis();
+                for (Map.Entry<Token.Endpoint, Long> entry : lastSeen.entrySet()) {
+                    if (currentTime - entry.getValue() > TIMEOUT) {
+                        System.out.println("Node " + entry.getKey() + " seems to have failed.");
+                        failedNodes.add(entry.getKey());
+                    }
+                }
+                for (Token.Endpoint failedNode : failedNodes) {
+                    rc.removeEndpoint(failedNode);
+                    lastSeen.remove(failedNode);
+                }
+
                 if (rc.length() == 1) {
                     candidates.add(rc.poll());
                     if (!first) {
@@ -34,11 +55,9 @@ public class TokenRing {
                 rc.incrementSequence();
                 Thread.sleep(1000);
                 rc.send(socket, next);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 System.out.println("Error receiving packet: " + e.getMessage());
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
         }
@@ -52,24 +71,19 @@ public class TokenRing {
             int port = socket.getLocalPort();
             System.out.printf("UDP endpoint is (%s, %d)\n", ip, port);
             if (args.length == 0) {
-                loop(socket,ip,port,true);
-            }
-            else if (args.length == 2) {
-                Token rc = new Token().append(ip,port);
-                rc.send(socket,args[0],Integer.parseInt(args[1]));
-                loop(socket,ip,port,false);
-            }
-            else {
+                loop(socket, ip, port, true);
+            } else if (args.length == 2) {
+                Token rc = new Token().append(ip, port);
+                rc.send(socket, args[0], Integer.parseInt(args[1]));
+                loop(socket, ip, port, false);
+            } else {
                 System.out.println("Usage: \"java TokenRing\" or \"java TokenRing <ip> <port>\"");
             }
-        }
-        catch (SocketException e) {
+        } catch (SocketException e) {
             System.out.println("Error creating socket: " + e.getMessage());
-        }
-        catch (UnknownHostException e) {
+        } catch (UnknownHostException e) {
             System.out.println("Error while determining IP address: " + e.getMessage());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("IO error: " + e.getMessage());
             System.out.println(e.getStackTrace());
         }

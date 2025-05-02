@@ -1,0 +1,107 @@
+AUFGABE 1
+
+Als erstes habe ich mir das Protokoll angeschaut und in Zeile 213 eine POST-Anfrage an die Seite "login.php" gefunden.
+Dort war logischerweise das Passwort als Parameter angegeben ("password=dzh20szq").
+
+Daraufhin wusste ich, dass ich nach Verbindungen zur Seite "login.php" suchen muss.
+Dies kann ich filtern mit 'frame contains "login.php"'.
+
+Folgende Zeilen wurden mir daraufhin angezeigt:
+-> 213, 215, 217, 464, 468, 470
+
+Die Zeile 215 ist lediglich die Antwort und enthält keine weiteren relevanten Infos für mich.
+In den anderen Zeilen werden lediglich die Ressourcen (z.B. die css-Styles) übertragen.
+
+Im nächsten Schritt habe ich daher die Website http://www.lanwan.ninja/dzh20szq aufgerufen.
+
+Der nächste Hinweis war, dass ein HTTP-Error anders ist, als alle anderen.
+Also habe ich nach den HTTP-Fehlern gefiltert. Bekannterweise liegen diese zwischen 400 und 599, im Gegensatz zu
+dem Statuscode 200, welcher gültige Anfragen kennzeichnet. Es war also naheliegend, dass alle Anfragen gültig sind und
+somit den Code 200 haben, wohingegen die eine Ausnahme ein Error und somit zwischen 400 bis 599 liegen muss.
+
+Mit dem Filter "http.response.code >= 400 and http.response.code <= 599" wurde mir dann auch nur noch eine Zeile angezeigt
+mit dem Statuscode 401, also einer unauthorisierten Anfrage und diese enthielt den nächsten Hinweis (ra6rgv7h).
+
+Der nächste Hinweis gab lediglich "Hiddeninping" an, also suchte ich als nächste nach einem Ping, wo der Code versteckt sein sollte.
+Das mache ich mit "icmp.type == 8" und fand somit den Code "nd7hark3".
+
+Damit hatte ich die Schatzsuche gelöst und die Lösung "Q29uZ3JhdHNfVGhpc19Jc190aGVfQm9udXMh" gefunden.
+(Das bedeutet übrigens "Congratulations_This_Is_the_Bonus!")
+
+
+
+AUFGABE 2
+
+tracert www.anu.edu.au
+
+Routenverfolgung zu terra-web.anu.edu.au [130.56.67.33]
+über maximal 30 Hops:
+
+  1     2 ms     2 ms     1 ms  speedport.ip [**.***.***.**]
+  2    43 ms    28 ms    40 ms  p3e9bf613.dip0.t-ipconnect.de [**.***.***.**]
+  3    12 ms    13 ms    13 ms  f-eh1-i.F.DE.NET.DTAG.DE [**.***.***.**]
+  4    14 ms    15 ms    13 ms  [**.***.***.**]
+  5     *        *       52 ms  ae2.3217.ear4.lon1.neo.colt.net [171.75.8.43]
+  6    28 ms    34 ms    32 ms  AARNET-PTY.ear4.London1.Level3.net [217.163.113.74]
+  7   324 ms   300 ms   301 ms  et-0-3-0.pe1.actn.act.aarnet.net.au [113.197.15.11]
+  8     *        *        *     Zeitüberschreitung der Anforderung.
+  9     *        *        *     Zeitüberschreitung der Anforderung.
+ 10     *        *        *     Zeitüberschreitung der Anforderung.
+ 11     *        *        *     Zeitüberschreitung der Anforderung.
+ 12     *        *        *     Zeitüberschreitung der Anforderung.
+ 13     *        *        *     Zeitüberschreitung der Anforderung.
+ 14     *        *        *     Zeitüberschreitung der Anforderung.
+ 15     *        *        *     Zeitüberschreitung der Anforderung.
+ 16     *        *        *     Zeitüberschreitung der Anforderung.
+[manuell abgebrochen]
+
+ Die tracert-Ausgabe zeigt den Weg von meinem Computer zum Server der Australian National University.
+ Die Datenpakete passierten mehrere Router in Deutschland und London, bevor sie Australien erreichten,
+ was durch die stark ansteigende Antwortzeit deutlich wird.
+ Ab dem achten Hop gab es keine Antworten mehr, was wahrscheinlich auf Firewalls oder
+ Router-Konfigurationen im Zielnetzwerk zurückzuführen ist und nicht zwingend eine Verbindungsstörung bedeutet.
+
+
+
+AUFGABE 3
+
+Die UDP-Anfrage ist deutlich langsamer als die TCP-Anfrage, was auf folgende Eigenschaften zurückzuführen ist:
+
+1) UDP ist ein verbindungsloses Protokoll. Das bedeutet, dass beim Senden eines UDP-Pakets keine vorherige Verbindung
+aufgebaut wird und der Sender keine Bestätigung erhält, ob das Paket sein Ziel erreicht hat.
+Wenn Nmap ein UDP-Paket an einen Port sendet und keine Antwort erhält, weiß es nicht sicher,
+ob der Port geschlossen ist oder ob das Paket einfach verworfen wurde (z.B. durch eine Firewall).
+Um dies zu klären, muss Nmap in der Regel auf ein Timeout warten oder mehrere Versuche starten,
+was den Scanprozess erheblich verlangsamt. Es gibt keine standardmäßige "Port geschlossen"-Antwort in UDP.
+
+2) TCP ist ein verbindungsorientiertes Protokoll. Bevor Daten übertragen werden, wird ein "Three-Way-Handshake"
+durchgeführt, um eine Verbindung aufzubauen. Nmap nutzt beim -sS-Scan (SYN-Scan) einen "halboffenen" Scan.
+Es sendet ein SYN-Paket (Synchronize) an den Zielport.
+a) Wenn der Port offen ist, antwortet der Zielrechner mit einem SYN-ACK (Synchronize-Acknowledge).
+Nmap schließt die Verbindung dann sofort mit einem RST-Paket (Reset), ohne die vollständige Verbindung aufzubauen.
+Dies ist schnell und unauffällig.
+b) Wenn der Port geschlossen ist, antwortet der Zielrechner sofort mit einem RST-Paket.
+Nmap weiß also direkt, dass der Port geschlossen ist und kann zum nächsten Port übergehen.
+c) Wenn eine Firewall das SYN-Paket blockiert, erhält Nmap keine Antwort und wartet auf ein Timeout,
+ähnlich wie bei UDP. Allerdings ist die Wahrscheinlichkeit einer direkten "Port geschlossen"-Antwort bei TCP deutlich höher.
+
+
+
+AUFGABE 4
+
+Zusammenfassung der Änderungen
+
+  Token.java:
+      Hinzugefügt: removeEndpoint(Endpoint endpointToRemove) Methode, um einen bestimmten Knoten
+      aus dem Token-Ring zu entfernen. Dies erzeugt einen neuen Token mit dem gefilterten Ring.
+
+  TokenRing.java:
+      Hinzugefügt: TIMEOUT Konstante für die Ausfallerkennung.
+      Hinzugefügt: lastSeen HashMap, um den Zeitpunkt des letzten Empfangs eines Tokens von jedem Knoten zu verfolgen.
+      In der loop-Methode:
+          Jedes Mal, wenn ein Token empfangen wird, wird die lastSeen-Zeit für alle Knoten im Ring aktualisiert.
+          Nach dem Empfang des Tokens wird überprüft, ob Knoten den Timeout überschritten haben.
+          Wenn ja, werden sie als ausgefallen betrachtet, aus dem Ring entfernt und aus lastSeen gelöscht.
+
+Diese Änderungen ermöglichen es dem Token-Ring, sich von Knotenausfällen zu erholen,
+indem ausgefallene Knoten dynamisch aus dem Ring entfernt werden.
