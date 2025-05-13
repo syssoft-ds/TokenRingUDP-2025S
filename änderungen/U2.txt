@@ -1,0 +1,53 @@
+Aufgabe 01
+Display Filter:
+http: -> ra6rgv7h
+icmp: -> Pings für 2. Rätsel mit Tipp "Hiddeninping"
+habe durchsucht, was mit flag gemeint ist, habe alle Kombinationen ausprobiert, welche in Flag Syntax (0x7557) geschrieben wurden.
+Dann habe ich versucht, was aus dem Abschnitt Data zu nutzen, bis ich dann nd7hark3 benutzt hatte. Ich verstehe noch nicht, warum das als flag zählt, aber damit habe ich dann eine neue Seite öffnen können, auf welcher ich das Schlüsselpasswort bekommen habe: Q29uZ3JhdHNfVGhpc19Jc190aGVfQm9udXMh
+
+Aufgabe 02:
+ 1     3 ms     6 ms     1 ms  fritz.box [xxx.xxx.xxx.x]
+  2     *        *        *     Zeitüberschreitung der Anforderung.
+  3    13 ms     9 ms     9 ms  188.111.160.230
+  4    16 ms    19 ms    14 ms  188.111.217.176
+  5    29 ms    15 ms    17 ms  92.79.214.176
+  6    16 ms    17 ms    18 ms  145.254.2.209
+  7    21 ms    20 ms    15 ms  xe-1-2-0.mpr1.fra4.de.above.net [80.81.194.26]
+  8     *        *        *     Zeitüberschreitung der Anforderung.
+  9     *      160 ms     *     ae2.cs1.ams17.nl.eth.zayo.com [64.125.29.59]
+ 10   152 ms     *        *     ae4.cs3.ams10.nl.eth.zayo.com [64.125.28.37]
+ 11   154 ms   164 ms   170 ms  ae10.cr1.lhr15.uk.eth.zayo.com [64.125.29.17]
+ 12   182 ms   159 ms     *     ae2.cr1.lhr11.uk.zip.zayo.com [64.125.24.140]
+ 13     *        *        *     Zeitüberschreitung der Anforderung.
+ 14     *        *        *     Zeitüberschreitung der Anforderung.
+ 15     *        *        *     Zeitüberschreitung der Anforderung.
+ 16   153 ms   154 ms   153 ms  ae16.cr2.ord9.us.zip.zayo.com [64.125.25.234]
+ 17   162 ms   158 ms   154 ms  ae12.cr1.sea1.us.zip.zayo.com [64.125.19.4]
+ 18     *        *        *     Zeitüberschreitung der Anforderung.
+ 19   159 ms   153 ms   169 ms  ae27.mpr1.sea1.us.zip.zayo.com [64.125.29.1]
+ 20   166 ms   151 ms   152 ms  64.125.193.130.i223.above.net [64.125.193.130]
+ 21   291 ms   291 ms   289 ms  et-10-0-5.170.pe1.brwy.nsw.aarnet.net.au [113.197.15.62]
+ 22   293 ms   292 ms   289 ms  et-1-1-0.pe1.rsby.nsw.aarnet.net.au [113.197.15.12]
+ 23   298 ms   295 ms   299 ms  et-0-3-0.pe1.actn.act.aarnet.net.au [113.197.15.11]
+ 24     *        *        *     Zeitüberschreitung der Anforderung.
+ 25     *        *        *     Zeitüberschreitung der Anforderung.
+ 26     *        *        *     Zeitüberschreitung der Anforderung.
+ 27     *        *        *     Zeitüberschreitung der Anforderung.
+ 28     *        *        *     Zeitüberschreitung der Anforderung.
+ 29     *        *        *     Zeitüberschreitung der Anforderung.
+ 30     *        *        *     Zeitüberschreitung der Anforderung.
+
+PC -> Router
+Router -> Vodafone
+Vodafone -> PCCW Global
+PCCW Global -> Zayo
+Zayo -> Australian Academic and Research Network
+
+Traceroute sendet Pakete mit unterschiedlicher Sendelänge zur Zieladresse. Dabei schickt jede Zwischenverbindung die Anfrage zurück.
+Man kann die Antworten in 2 Gruppen unterteilen, Adressen, welche antworten, sowie Adressen, welche aufgrund von Firewalls nicht Antworten. So kann ich jetzt sehen, dass mein Paket über Regionale zu Globalen Internetanbietern weitergeschickt wird, bis es dann an der Zieldestination ankommt.
+
+Aufgabe 03:
+Der Scan von TCP- Ports ist schneller, weil hier nur überprüft wird, ob ein Port einen Handshake durchführt, also ob auf eine synchronisationsanfrage eine Antwort kommt. Danach wird der Vorgang abgebrochen. Bei einem Scan von UDP-Ports muss nmap einige Sekunden darauf warten, ob eine Antowrt kommt, oder keine Antwort kommt. Danach kann auch nicht gesagt werden, aus welchem Grund keine Antwort zurückgekommen ist. Nach Zuhilfenahme von KI habe ich herausgefunden, dass man die Scans schneller machen kann, allerdings verringert sich dabei entweder die Qualität oder die Quantität der Ergebnisse. Ich könnte die einzelnen Methoden jetzt auflisten, zusammengefasst kann man aber sagen, dass man durch die Beschleunigung einen oberflächlicheren Scan durchführen würde. Man kann auf weniger Inhalte zugreifen, und hat auch weniger Inhalte abgedeckt. So können Sicherheitslücken entstehen. 
+
+Aufgabe 4: 
+Ich hatte zwischenzeitlich verschiedene neue Codeabschnitte eingebaut, hatte dann aber Probleme damit, dass der Token weitergesendet wird. Ich habe auf Terminal 1 alle anderen TokenRing Mitglieder erhalten, allerdings wurde von dort aus der Token nicht weitergeschickt. Als ich wieder von vorne programmieren wollte, um step by step alles zu implimentieren, habe ich dafür den Code nochmal ohne meine Änderungen geladen. Seitdem findet keine Kommunikation mehr statt. Auch hier wird empfangen, aber nach dem Beitritt eines neuen Ringmitglieds kein Token geschickt. Ich sitze jetzt einige Stunden an allein dieser Aufgabe und habe langsam keine Kapazität mehr dafür. Ich habe mich mit der Aufgabe beschäftigt, aktuell bekomme ich sie jedoch nicht gelöst.
