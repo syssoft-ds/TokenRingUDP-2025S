@@ -24,16 +24,44 @@ public class TokenRing {
                         continue;
                     }
                 }
+
+                // Nur ein Teilnehmer im Ring
+                if (rc.length() == 1) {
+                    candidates.add(rc.poll());
+                    if (!first) {
+                        continue;
+                    }
+                }
+
                 first = false;
+
                 for (Token.Endpoint candidate : candidates) {
                     rc.append(candidate);
                 }
                 candidates.clear();
-                Token.Endpoint next = rc.poll();
-                rc.append(next);
-                rc.incrementSequence();
-                Thread.sleep(1000);
-                rc.send(socket, next);
+                // Fehlerresistente Token-Weitergabe
+                boolean tokenSent = false;
+                int attempts = rc.length(); // wie viele Knoten versuchen wir?
+
+                while (!tokenSent && attempts > 0) {
+                    Token.Endpoint next = rc.poll(); // nächsten Knoten holen
+                    rc.append(next); // wieder ans Ende anhängen
+
+                    try {
+                        rc.incrementSequence();
+                        Thread.sleep(1000); // künstliche Verzögerung
+                        rc.send(socket, next); // senden an nächsten
+                        tokenSent = true;
+                    } catch (IOException e) {
+                        System.out.printf("Knoten (%s, %d) nicht erreichbar – wird entfernt\n", next.ip(), next.port());
+                        rc.remove(next); // dauerhaft aus dem Ring löschen
+                        attempts--;
+                    }
+                }
+
+                if (!tokenSent) {
+                    System.out.println("Kein erreichbarer Knoten mehr – Token geht verloren.");
+                }
             }
             catch (IOException e) {
                 System.out.println("Error receiving packet: " + e.getMessage());

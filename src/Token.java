@@ -64,6 +64,10 @@ public class Token {
         send(s, endpoint.ip(), endpoint.port());
     }
 
+    public void remove(Endpoint endpoint) {
+        ring.removeIf(e -> e.ip().equals(endpoint.ip()) && e.port() == endpoint.port());
+    }
+
     public static Token receive(DatagramSocket s) throws IOException {
         byte[] buf = new byte[max_buffer_size];
         DatagramPacket packet = new DatagramPacket(buf, buf.length);

@@ -1,0 +1,103 @@
+Aufgabe 1):
+Für Hinweis 1: frame contains "password"
+
+Für Hinweis 2: http matches "error"
+
+Für Hinweis 3: icmp
+
+The final solution code is Q29uZ3JhdHNfVGhpc19Jc190aGVfQm9udXMh
+
+
+
+Aufgabe 2)
+Ausgabe: 
+
+Routenverfolgung zu anu.edu.au [130.56.67.33]
+▒ber maximal 30 Hops:
+
+  1     2 ms     1 ms     2 ms  compalhub.home [192.168.0.1]
+  2    16 ms    27 ms    16 ms  ip53a9b743.static.kabel-deutschland.de [83.169.183.67]
+  3    21 ms    17 ms    14 ms  ip5886c969.static.kabel-deutschland.de [88.134.201.105]
+  4    18 ms    18 ms    26 ms  145.254.3.170
+  5    31 ms    16 ms    16 ms  145.254.2.209
+  6    18 ms    18 ms    18 ms  xe-1-2-0.mpr1.fra4.de.above.net [80.81.194.26]
+  7   156 ms   153 ms   174 ms  ae12.cs1.fra6.de.eth.zayo.com [64.125.26.172]
+  8   151 ms   154 ms   151 ms  ae2.cs1.ams17.nl.eth.zayo.com [64.125.29.59]
+  9     *        *        *     Zeit▒berschreitung der Anforderung.
+ 10     *        *        *     Zeit▒berschreitung der Anforderung.
+ 11     *        *        *     Zeit▒berschreitung der Anforderung.
+ 12     *        *        *     Zeit▒berschreitung der Anforderung.
+ 13   157 ms     *        *     ae3.cs3.ord2.us.eth.zayo.com [64.125.29.209]
+ 14     *        *        *     Zeit▒berschreitung der Anforderung.
+ 15     *        *        *     Zeit▒berschreitung der Anforderung.
+ 16     *        *        *     Zeit▒berschreitung der Anforderung.
+ 17     *        *        *     Zeit▒berschreitung der Anforderung.
+ 18     *        *        *     Zeit▒berschreitung der Anforderung.
+ 19   155 ms   153 ms   154 ms  64.125.193.130.i223.above.net [64.125.193.130]
+ 20   298 ms   385 ms   410 ms  et-10-0-5.170.pe1.brwy.nsw.aarnet.net.au [113.197.15.62]
+ 21   359 ms   306 ms   308 ms  et-1-1-0.pe1.rsby.nsw.aarnet.net.au [113.197.15.12]
+ 22   314 ms   315 ms   291 ms  et-0-3-0.pe1.actn.act.aarnet.net.au [113.197.15.11]
+ 23     *        *        *     Zeit▒berschreitung der Anforderung.
+ 24     *        *        *     Zeit▒berschreitung der Anforderung.
+ 25     *        *        *     Zeit▒berschreitung der Anforderung.
+ 26     *        *        *     Zeit▒berschreitung der Anforderung.
+ 27     *        *        *     Zeit▒berschreitung der Anforderung.
+ 28     *        *        *     Zeit▒berschreitung der Anforderung.
+ 29     *        *        *     Zeit▒berschreitung der Anforderung.
+ 30     *        *        *     Zeit▒berschreitung der Anforderung.
+
+Ablaufverfolgung beendet.
+
+Erklärung von Traceroute: Die erste Zeile zeigt, dass Traceroute versucht von meinem Rechner aus zu anu.edu.au mit der IP-Adresse 130.56.67.33 die Route zu finden. Dabei werden höchstens 30 Zwischenstationen "Hops" untersucht.
+Die durchnummerierten Zeilen repräsentieren alle einen "Hop", also einen Zwischenrouter oder ähnliches, was das Paket weiterleitet.
+Der erste "Hop" zeigt meinen Router zuhause (compalhub.home) und die ms Angabe (Round-Trip-Zeiten) zeigt wie lange es dauert ein Paket von meinem Computer an den Router zu senden und wieder zurückgeschickt zu bekommen.
+Das "Zeitüberschreitung der Anforderung" sagt, dass Traceroute keine Antwort erhalten hat, dies kann aufgrund von Firewall, Sicherheitsrichtlinien oder Ignorieren von ICPM-Paketen passieren.
+
+Aufgabe 3)
+Ausgabe von nmap -sU scanme.nmap.org: 
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.21s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 983 closed udp ports (port-unreach)
+PORT      STATE         SERVICE
+67/udp    open|filtered dhcps
+68/udp    open|filtered dhcpc
+123/udp   open          ntp
+135/udp   open|filtered msrpc
+137/udp   open|filtered netbios-ns
+138/udp   open|filtered netbios-dgm
+139/udp   open|filtered netbios-ssn
+161/udp   open|filtered snmp
+162/udp   open|filtered snmptrap
+445/udp   open|filtered microsoft-ds
+1900/udp  open|filtered upnp
+2362/udp  open|filtered digiman
+5353/udp  open|filtered zeroconf
+16674/udp open|filtered unknown
+17184/udp open|filtered unknown
+29243/udp open|filtered unknown
+53838/udp open|filtered unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 1199.56 seconds
+
+Aufgabe von nmap -sS scanme.nmap.org:
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.20s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 996 closed tcp ports (reset)
+PORT      STATE SERVICE
+22/tcp    open  ssh
+80/tcp    open  http
+9929/tcp  open  nping-echo
+31337/tcp open  Elite
+
+Nmap done: 1 IP address (1 host up) scanned in 14.42 seconds
+
+Welche Unterschiede gibt es?
+Bei UDP-Ports muss Nmap teilweise lange Timeouts abwarten, wenn ein Port offen ist, da es generell keine Bestätigung gibt, ob ein Paket angekommen ist (UDP ist verbindungslos). 
+
+Bei TCP-Ports hingegen, antwortet das Ziel auf ein SYN-Paket mit einem SYN/ACK. Daher weiß Nmap sofort, dass der Port offen ist. Dadurch ist es am Ende sehr viel schneller.
+
+Verbesserungsmöglichkeiten: Man kann Timeouts begrenzen oder nur wichtige Ports scannen
+
+Aufgabe 4: Siehe veränderte .java Dateien in TokenRing.java und Token.java
