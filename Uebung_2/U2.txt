@@ -1,0 +1,366 @@
+Abgabe Übung2 Nils Böhnke
+
+Aufgabe 1:
+Zuerst habe ich die Wireshark Datei geöffnet und nach http Protokollen gefiltert, dabei ist mir in Zeile 493 bei der Info ein 8 stelliger Code aufgefallen und ich habe diesen ausprobiert: ra6rgv7h -> www.lanwan.ninja/ra6rgv7h. Dies hat funktioniert, ich habe nur einen Schritt übersprungen.
+
+Ich bin dem nächsten Hinweis gefolgt und habe die Filter auf icmp gestellt, weil dies auf ping echo request hinweist.
+In der Data Section ist mir im Klartext eine 8 stellige Zeichenfolge aufgefallen und habe diese eingegeben: nd7hark3 -> www.lanwan.ninja/nd7hark3.
+Am Ende bin ich auf der finalen Seite herausgekommen und habe das Passwort erhalten: Q29uZ3JhdHNfVGhpc19Jc190aGVfQm9udXMh
+
+Ich habe mit noch gefragt, was der erste Schritt war und habe über den http Filter in den Protokollen nachgeschaut. In Zeile 213 bei Login.php habe ich genauer nachgeschaut und in der Data-Section unten links im Klartext bei Password das Passwort gefunden: dzh20szq -> www.lanwan.ninja/dzh20szq. Das wäre der erste Schritt gewesen.
+
+
+
+Aufgabe 2:
+Was passiert, wenn man z.B. den Weg zu der Australian National University https://www.anu.edu.au von Traceroute aufzählen lässt?
+Erklären Sie anhand dieser Ausgabe in der Textdatei, wie Traceroute funktioniert.
+
+Um die Route eines Datenpaketes zu einem Rechner über das Internet zu verfolgen, beziehungsweis zu analysieren, benutzt man traceroutes. 
+Der Verlauf des Paketes über welche Knotenpunkte dieses verläuft werden angezeigt. Man kann besser nachvollziehen, wie die Daten im Internet reisen.
+
+Jedes Ip-Paket besitzt ein TTL (Time-To-Live) Feld, die TTL-Zahl wird bei jedem Router (Hop) um 1 verringert, bei TTL = 0 wird
+das Paket verworfen und ICMP gibt ("Time Exceeded") als Fehlermeldung zurück.
+
+Traceroute sendet Pakete mit aufsteigendem TTL-Wert zum Ziel.
+
+Als Ausgabe von Traceroute erhält man IP-Adressen von jedem Router auf dem Weg zum Ziel.
+
+
+
+tracert www.anu.edu.au
+
+Routenverfolgung zu terra-web.anu.edu.au [130.56.67.33]
+über maximal 30 Hops:
+
+  1     5 ms     6 ms     4 ms  fritz.box [***.***.***.***]
+  2    24 ms    21 ms    22 ms  p5092823c.dip0.t-ipconnect.de [**.***.***.**]
+  3    29 ms    35 ms    27 ms  f-eh1-i.F.DE.NET.DTAG.DE [**.***.**.**]
+  4    28 ms    26 ms    25 ms  ***.***.**.**
+  5     *        *       41 ms  ae2.3217.ear4.lon1.neo.colt.net [171.75.8.43]
+  6    39 ms    39 ms    39 ms  AARNET-PTY.ear4.London1.Level3.net [217.163.113.74]
+  7   407 ms   405 ms   407 ms  et-0-3-0.pe1.actn.act.aarnet.net.au [113.197.15.11]
+  8     *        *        *     Zeitüberschreitung der Anforderung.
+  9     *        *        *     Zeitüberschreitung der Anforderung.
+ 10     *        *        *     Zeitüberschreitung der Anforderung.
+ 11     *        *        *     Zeitüberschreitung der Anforderung.
+ 12     *        *        *     Zeitüberschreitung der Anforderung.
+ 13     *        *        *     Zeitüberschreitung der Anforderung.
+ 14     *        *        *     Zeitüberschreitung der Anforderung.
+ 15     *        *        *     Zeitüberschreitung der Anforderung.
+ 16     *        *        *     Zeitüberschreitung der Anforderung.
+ 17     *        *        *     Zeitüberschreitung der Anforderung.
+ 18     *        *        *     Zeitüberschreitung der Anforderung.
+ 19     *        *        *     Zeitüberschreitung der Anforderung.
+ 20     *        *        *     Zeitüberschreitung der Anforderung.
+
+Das Paket reist durch verschiedene Netzwerke, oft zuerst durch lokale und nationale Netze, dann durch internationale Leitungen nach Australien von meinem Computer zum Server der Australien National University.
+Die Pakete reisen durch mehrere Router in London und Deutschland nach Australien, dort steigt die Antwortzeit sehr stark an.
+Die Sprünge in der Latenzzeit von 39 ms auf über 407 ms zeigen, wann ein Ozean oder großer geographischer Abstand überbrückt wurde.
+Der letzte Hop zeigt das Ziel, in diesem Fall den Server der ANU.
+Der Abbruch erfolgt durch Störungen oder ähnliches.
+
+
+
+Aufgabe 3:
+Befehl: nmap -sS scanme.nmap.org => TCP-Scan => wird auch als Syn-Scan bezeichnet
+
+Befehl: nmap -sU scanme.nmap.org => UDP-Scan => scannen von UDP-Ports ohne Verbindung aufzubauen
+
+
+
+Warum ist einer der beiden Scans wesentlich schneller als der Andere? & Welche Eigenarten der Protokolle oder des 
+Programms führen dazu? 
+TCP-Scan deutlich schneller als der UDP-Scan
+1) Verbindungslos vs. Verbindungsorientiert  
+
+UDP ist verbindungslos, da ein offener UDP-Port meist gar nicht antwortet, wenn der Port geschlossen ist, antwortet das Ziel oft mit einer ICMP-Port-unreachable-Nachricht.
+→ Keine Antwort ≠ offen, sondern unsicher
+Es wird keine vorherige Verbindung aufgebaut und der Sender erhählt keine Bestätigung über das erreichen des Ziels.
+
+Nmap muss lange warten, ob überhaupt noch eine Antwort kommt, was den Scan verlangsamt, da nicht bekannt ist, ob das Paket verworfen wurde oder der Port zu ist. Nmap wartet lange, z.B. auf Timeout.
+
+
+TCP ist verbindungsorientiert, beim SYN-Scan sendet Nmap ein SYN-Paket, wenn der Port antwortet mit SYN-ACK ist dieser offen, wenn dieser mit RST antwortet dann ist er geschlossen. Der 3-Wege-Handshake wird durchgeführt.
+
+Port offen => SYN-ACK, NMAP => RST
+Port geschlossen => RST
+
+Warten auf Timeout bei Firewallblockade
+
+
+
+Gibt es Möglichkeiten, den Scan schneller durchzuführen?
+Parallelisierung erhöhen; Timeouts anpassen; Nur bestimmte Ports scannen
+
+
+
+
+Aufgabe 4: 
+Ziel ist es, dass das System so erweitert wird, dass beim Ausfall das Programm weiterläuft.
+
+Möglichkeiten zur Umsetzung sind besipielsweise, wenn send(socket, endpoint) eine Exception wirft, man davon ausgehen kann, dass der Knoten nicht erreicht werden kann.
+
+UDP sendet keine bestätigung, ein Mechanismus mit Ping oder Timeout kann helfen, bei gewisser Zeit von einem ausgegangenen Konten auszugehen.
+
+In Token.java kann eine Mehtode zur Knotenentfernung implementiert werden:
+public void remove(String ip, int port) {
+    ring.removeIf(e -> e.ip().equals(ip) && e.port() == port);
+}
+
+
+TokenRing.java:
+In der loop()-Methode Fehlerbehandlung anpassen, sodass ein fehlerhafter Knoten überspringen und entfernt wird:
+
+anstatt:
+
+Token.Endpoint next = rc.poll();
+rc.append(next);
+rc.incrementSequence();
+Thread.sleep(1000);
+rc.send(socket, next);
+
+durch ersetzten: 
+
+boolean sent = false;
+int attempts = rc.length(); // wir probieren alle verfügbaren Knoten durch
+while (!sent && attempts-- > 0 && rc.length() > 0) {
+    Token.Endpoint next = rc.poll();
+    rc.append(next); // wir schieben ihn ans Ende, falls er überlebt
+    rc.incrementSequence();
+    Thread.sleep(1000);
+    try {
+        rc.send(socket, next);
+        sent = true; // hat funktioniert
+    } catch (IOException e) {
+        System.out.printf("Knoten %s:%d nicht erreichbar – wird entfernt.\n", next.ip(), next.port());
+        rc.remove(next.ip(), next.port());
+    }
+}
+
+
+Die Abfangung des leeren Rings und verbesserte Ausgabe durch:
+/ ===  Schritt 3 – prüfen, ob Ring leer ist ===
+if (rc.length() == 0) {
+    System.out.println(" Ring ist leer. Kein erreichbarer Knoten übrig.");
+    Thread.sleep(1000); // Warte ab, ob neue Knoten dazukommen
+    continue;
+}
+
+// === Schritt 4 – aktueller Ring anzeigen ===
+System.out.print("Aktueller Ring: ");
+for (Token.Endpoint endpoint : rc.getRing()) {
+    System.out.printf("(%s:%d) ", endpoint.ip(), endpoint.port());
+}
+System.out.println();
+
+
+
+
+
+
+
+
+
+
+
+
+import java.io.IOException;
+import java.net.*;
+import java.util.LinkedList;
+
+public class TokenRing {
+
+    private static void loop(DatagramSocket socket, String ip, int port, boolean first) {
+        LinkedList<Token.Endpoint> candidates = new LinkedList<>();
+        if (first) {
+            candidates.add(new Token.Endpoint(ip, port));
+        }
+        while (true) {
+            try {
+                Token rc = Token.receive(socket);
+
+                System.out.printf("Token: seq=%d, #members=%d", rc.getSequence(), rc.length());
+                for (Token.Endpoint endpoint : rc.getRing()) {
+                    System.out.printf(" (%s, %d)", endpoint.ip(), endpoint.port());
+                }
+                System.out.println();
+
+                // Prüfen, ob Ring leer ist
+                if (rc.length() == 0) {
+                    System.out.println("Ring ist leer. ");
+                    Thread.sleep(1000);
+                    continue;
+                }
+
+                // Aktuellen Ring anzeigen
+                System.out.print("Aktueller Ring: ");
+                for (Token.Endpoint endpoint : rc.getRing()) {
+                    System.out.printf("(%s:%d) ", endpoint.ip(), endpoint.port());
+                }
+                System.out.println();
+
+                // Neuer Konten hinzufügen
+                if (rc.length() == 1) {
+                    candidates.add(rc.poll());
+                    if (!first) {
+                        continue;
+                    }
+                }
+
+                first = false;
+
+                for (Token.Endpoint candidate : candidates) {
+                    rc.append(candidate);
+                }
+                candidates.clear();
+
+                // Senden des Tokens mit Fehlerbehandlung
+                boolean sent = false;
+                int attempts = rc.length();
+                while (!sent && attempts-- > 0 && rc.length() > 0) {
+                    Token.Endpoint next = rc.poll();
+                    rc.append(next);
+                    rc.incrementSequence();
+                    Thread.sleep(1000);
+                    try {
+                        rc.send(socket, next);
+                        sent = true;
+                    } catch (IOException e) {
+                        System.out.printf("Knoten %s:%d nicht erreichbar – wird entfernt.\n", next.ip(), next.port());
+                        rc.remove(next.ip(), next.port());
+                    }
+                }
+
+            } catch (IOException e) {
+                System.out.println("Error receiving packet: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        try (DatagramSocket socket = new DatagramSocket()) {
+            socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+            String ip = socket.getLocalAddress().getHostAddress();
+            socket.disconnect();
+            int port = socket.getLocalPort();
+            System.out.printf("UDP endpoint is (%s, %d)\n", ip, port);
+            if (args.length == 0) {
+                loop(socket, ip, port, true);
+            } else if (args.length == 2) {
+                Token rc = new Token().append(ip, port);
+                rc.send(socket, args[0], Integer.parseInt(args[1]));
+                loop(socket, ip, port, false);
+            } else {
+                System.out.println("Usage: \"java TokenRing\" or \"java TokenRing <ip> <port>\"");
+            }
+        } catch (SocketException e) {
+            System.out.println("Error creating socket: " + e.getMessage());
+        } catch (UnknownHostException e) {
+            System.out.println("Error while determining IP address: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IO error: " + e.getMessage());
+            System.out.println(e.getStackTrace());
+        }
+    }
+}
+
+
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Token {
+
+    private static final int max_buffer_size = 4096;
+
+    public record Endpoint(String ip, int port) {}
+
+    public Token append(String ip, int port) {
+        ring.offer(new Endpoint(ip, port));
+        return this;
+    }
+
+    public Token append(Endpoint endpoint) {
+        ring.offer(endpoint);
+        return this;
+    }
+
+    public Endpoint first() {
+        return ring.peek();
+    }
+
+    public Endpoint poll() {
+        return ring.poll();
+    }
+
+    public int length () {
+        return ring.size();
+    }
+
+    private int sequence = 0;
+
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
+
+    public void incrementSequence() {
+        sequence++;
+    }
+
+    public void send (DatagramSocket s, String ip_address, int port ) throws IOException {
+        String rc_json = toJSON();
+        byte[] rc_json_bytes = rc_json.getBytes(StandardCharsets.UTF_8);
+        InetAddress address = InetAddress.getByName(ip_address);
+        DatagramPacket packet = new DatagramPacket(rc_json_bytes, rc_json_bytes.length, address, port);
+        System.out.printf("Sending %s to %s:%d\n", rc_json, ip_address, port);
+        s.send(packet);
+    }
+
+    public void send (DatagramSocket s, Endpoint endpoint) throws IOException {
+        send(s, endpoint.ip(), endpoint.port());
+    }
+
+    public static Token receive(DatagramSocket s) throws IOException {
+        byte[] buf = new byte[max_buffer_size];
+        DatagramPacket packet = new DatagramPacket(buf, buf.length);
+        s.receive(packet);
+        String rc_json = new String(packet.getData(),0,packet.getLength(), StandardCharsets.UTF_8);
+        System.out.printf("Received %s from %s:%d\n", rc_json, packet.getAddress().getHostAddress(), packet.getPort());
+        return fromJSON(rc_json);
+    }
+
+    @JsonProperty
+    private final Queue<Endpoint> ring = new LinkedList<>();
+
+    public Queue<Endpoint> getRing() {
+        return ring;
+    }
+
+    public void remove(String ip, int port) {
+        ring.removeIf(e -> e.ip().equals(ip) && e.port() == port);
+    }
+
+    private static final ObjectMapper serializer = new ObjectMapper();
+
+    public String toJSON() throws JsonProcessingException {
+        return serializer.writeValueAsString(this);
+    }
+
+    public static Token fromJSON(String json) throws IOException {
+        return serializer.readValue(json, Token.class);
+    }
+}
