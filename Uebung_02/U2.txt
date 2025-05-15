@@ -1,0 +1,242 @@
+## Aufgabe 1: Wireshark Schnitzeljagd
+
+- 1.Challenge: [" tcp.len > 8 && tcp matches "password" "]
+	Display Filter: "tcp.len > 8", damit auch nur Pakete mit mindestens 8 Byte Data gezeigt werden und matches "password"
+	um dem ersten Hinweis "Find the Password" zu folgen.
+	-> Paket No.213 listet in File Data mit "dzh20szq" das Passwort auf
+
+- 2.Challenge: [" http.response.code >= 400 "]
+	2.Hinweis war  eubHTTP-Error, weshalb ich den Display-Filter "http.response.code >= 400" verwendet habe
+	und mich nur durch die Pakete mit HTTP-Errors durchgearbeitet habe. Hier wurde dann zum Glück nur ein Paket
+	angezeigt.
+	-> Paket No.493 enthält in der Request-URI mit "ra6rgv7h" das nächste Passwort  
+
+- 3.Challenge: [" icmp "]
+	3.Hinweis (Hiddeninping) war das es im Ping versteckt sei, weshalb ich hier nun den Display Filter "icmp" verwendet habe.
+	-> Dann wurden zwei Pakete angezeigt, No.342 und No.343, wobei beide unter ICMP in Data mit "nd7hark3" das
+	nächste Passwort stehen hatten.
+
+- Die Finale Lösung lautet dann "Q29uZ3JhdHNfVGhpc19Jc190aGVfQm9udXMh" was decoded "Congrats_This_Is_the_Bonus!" bedeutet.
+
+
+
+## Aufgabe 2: Traceroute
+
+# Anfrage mit tracert 8.8.8.8 an Google
+
+Routenverfolgung zu dns.google [8.8.8.8]
+über maximal 30 Hops:
+
+  1    <1 ms    <1 ms    <1 ms  fritz.box [192.168.178.1]
+  2     6 ms     4 ms     5 ms  p3e9bf639.dip0.t-ipconnect.de [62.155.246.57]
+  3     9 ms     9 ms     9 ms  f-ed11-i.F.DE.NET.DTAG.DE [62.154.18.18]
+  4     9 ms     8 ms     8 ms  62.157.250.46
+  5    10 ms     9 ms     9 ms  192.178.108.183
+  6    10 ms     8 ms    20 ms  142.250.214.193
+  7     9 ms     8 ms     8 ms  dns.google [8.8.8.8]
+
+Ablaufverfolgung beendet.
+
+
+
+# Anfrage zu Australian National University https://www.anu.edu.au:
+
+Routenverfolgung zu anu.edu.au [130.56.67.33]
+über maximal 30 Hops:
+
+  1     1 ms    <1 ms     1 ms  fritz.box [192.168.178.1]
+  2     5 ms     5 ms     6 ms  p3e9bf639.dip0.t-ipconnect.de [62.155.246.57]
+  3    10 ms     8 ms     8 ms  62.154.17.122
+  4     *        *        *     Zeitüberschreitung der Anforderung.
+  5     *        *        *     Zeitüberschreitung der Anforderung.
+  6    24 ms    22 ms    22 ms  AARNET-PTY.ear4.London1.Level3.net [217.163.113.74]
+  7   294 ms   294 ms   294 ms  et-0-3-0.pe1.actn.act.aarnet.net.au [113.197.15.11]
+  8     *        *        *     Zeitüberschreitung der Anforderung.
+  9     *        *        *     Zeitüberschreitung der Anforderung.
+ 10     *        *        *     Zeitüberschreitung der Anforderung.
+ 11     *        *        *     Zeitüberschreitung der Anforderung.
+ 12     *        *        *     Zeitüberschreitung der Anforderung.
+ 13     *        *        *     Zeitüberschreitung der Anforderung.
+ 14     *        *        *     Zeitüberschreitung der Anforderung.
+ 15     *        *        *     Zeitüberschreitung der Anforderung.
+ 16  ^C
+
+
+# Anfrage zu Website der Universität Trier
+
+Routenverfolgung zu www.uni-trier.de [136.199.189.15]
+über maximal 30 Hops:
+
+  1     4 ms     1 ms     2 ms  fritz.box [192.168.178.1]
+  2     7 ms    13 ms    23 ms  p3e9bf639.dip0.t-ipconnect.de [62.155.246.57]
+  3    12 ms     9 ms     8 ms  62.154.18.2
+  4     9 ms    13 ms    12 ms  te-0-0-2-686.core1.fra1.ix.f.man-da.net [87.190.232.204]
+  5     9 ms    10 ms     9 ms  g-decix-1.rlp-net.net [82.195.78.6]
+  6    12 ms    15 ms     9 ms  g-interxion-2.rlp-net.net [217.198.246.249]
+  7    11 ms    16 ms    12 ms  g-hbf-mz-2.rlp-net.net [217.198.240.14]
+  8    11 ms    13 ms    11 ms  g-hbf-ko-1.rlp-net.net [217.198.247.118]
+  9    15 ms    14 ms    13 ms  g-hbf-tr-2.rlp-net.net [217.198.240.30]
+ 10    18 ms    16 ms    19 ms  g-uni-tr-1.rlp-net.net [217.198.247.46]
+ 11    13 ms    11 ms    12 ms  uni-tr-gate.rlp-net.net [217.198.241.194]
+ 12    13 ms    15 ms    12 ms  core.uni-trier.de [136.199.42.1]
+ 13    18 ms    11 ms    13 ms  www.uni-trier.de [136.199.189.15]
+
+Bei Traceroute wird eine ähnliche Funktionsweise wie des Ping-Befehls genutzt. Bei dem Ping Befehl
+wird an eine entsprechende Adresse 4 Pakete an die Zieladresse geschickt und diese wieder zurück an den
+Sender wo dann auch die Ergebnisse bzgl. Dauer und Größe usw. dargestellt werden. Bei Traceroute ist dies aähnlich,
+da die eigentliche Funktion ist, die Knotenpunkte des Wegs zu einer bestimmten Adresse auszuwerten oder eher darzustellen.
+Hier wird ähnlich, nacheinander ein Paket zu einem Knotenpunkte auf dem Weg zur Zieladresse geschickt. Dort wird dann ein 
+Paket zurückgesendet, was vom Nutzer/Sender empfangen wird, womit man also seinen Ersten Knotenpunkt auf dem Weg zur Zieladresse
+erfährt. Hier im Beispiel zur Anfrage an die Australian National University wird anfangs ein Paket verschickt und landet auf dem
+Weg zur Zieladresse der ANU beim Knotenpunkt der Adresse 192.168.178.1, welches die meines Router ist. Also wurde vom Router ein Paket
+zurückgeschickt, womit ich Informationen über den ersten Knotenpunkt erhielt. Danach wird ein neues Paket vom Nutzer/Sender über diesen 
+Knotenpunkt an den nächsten Knotenpunkt auf dem Weg zum Ziel geschickt. Von dort aus wird wieder ein Paket zurückgeschickt, womit man 
+Informationen über den nächsten Knotenpunkt hat. Diese Methode wird wiederholt, bis die Zieladresse erreicht wurde und ein entsprechendes 
+Paket zurückgeschickt hat oder bis die maximale Anzahl an Hops erreicht wurde (standardmäßig 30 aber mit -h auch möglich diese auf eine 
+bestimmte Anzahl an maximalen Hops festzuelegen). Also folgt nach der Antwort meines Routers der nächste Knotenpunkt, welcher die Adresse
+62.155.246.57 hat. Dieser bekam über den Weg meines Routers (da Router die Verbindung meines Rechners mit dem Internet bildet) ein Paket zugeschickt
+und sendete eins zurück, womit wir Informationen über einen möglichen zweiten, also nächsten Knotenpunkt auf dem Weg zur ANU erhielten. Hier muss man
+anmerken, dass eine erneute Anfrage wieder einen anderen Weg nutzen könnte, also wird beim Verfahren von traceroute nach einer Antwort bzw. einer Anmerkung
+eines Knotenpunktes ein Counter oder etwas ähnliches erhöht, womit bei der nächsten Anfrage berücksichtigt wird, welche Adresse nun auf dem Weg zur ANU einen
+möglichen weiteren Knotenpunkt bilden könnte. Danach folgte also die gleiche Methode allerdings zunächst mit einer Zeitüberschreitung.
+Also wurde ein möglicher nächster Knoten angefragt, welcher aufgrund einer Firwall oder anderen Schutzmechanismen ein Paket von meiner Anfrage nicht akzeptierte.
+Der nächste Versuch mit einem möglichen anderen Knoten wurde auch abgewiesen, bis der 6. Hop also der 3. Knotenpunkt mit der Adresse 217.163.113.74 meine Paket
+akzeptierte und eine Antwort zurückschickte. Dieser enthält die Information AARNET-PTY.ear4.London1.Level3.net, womit wir wissen, dass unser nächster
+Knotenpunkt auf dem Weg zur ANU also ein Verteilerknoten in London wäre. Der nächste Hop lieferte den 4. Knotenpunkt mit der Adresse 113.197.15.11 und der Information
+[94 ms   294 ms   294 ms  et-0-3-0.pe1.actn.act.aarnet.net.au] woraus sich zeigt, dass ein 4. Knotenpunkt der Verteilerknoten in Australien wäre, allerdings sieht man
+an der Dauer das es verhältnismäßg lange dauern würde. Augrund von Firewalls usw. ist die Anfrage leider nicht bis ans Zeil gelangt, weshalb der Vorgang abgebrochen wurde.
+Allerdings ist die Ausgabe nicht immer gleich, weshalb man festhalten muss, dass die eigentliche Ausgabe nur ein möglicher Weg an die Zieladresse bildet, sodass bei einer
+weiteren Anfrage evtl. eine andere Ausgabe folgt. 
+
+
+
+## Aufgabe 3: Nmap
+
+
+# Ausgabe mit „nmap -sU scanme.nmap.org“:
+
+C:\Users\User1>nmap -sU scanme.nmap.org
+Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-13 00:59 Mitteleuropõische Sommerzeit
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.17s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 993 closed udp ports (port-unreach)
+PORT    STATE         SERVICE
+68/udp  open|filtered dhcpc
+123/udp open          ntp
+135/udp open|filtered msrpc
+137/udp open|filtered netbios-ns
+138/udp open|filtered netbios-dgm
+139/udp open|filtered netbios-ssn
+445/udp open|filtered microsoft-ds
+
+Nmap done: 1 IP address (1 host up) scanned in 1019.62 seconds
+
+
+# Ausgabe mit „nmap -sS scanme.nmap.org“:
+
+C:\Users\User1>nmap -sS scanme.nmap.org
+Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-13 01:24 Mitteleuropõische Sommerzeit
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.17s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 993 closed tcp ports (reset)
+PORT      STATE    SERVICE
+22/tcp    open     ssh
+80/tcp    open     http
+135/tcp   filtered msrpc
+139/tcp   filtered netbios-ssn
+445/tcp   filtered microsoft-ds
+9929/tcp  open     nping-echo
+31337/tcp open     Elite
+
+Nmap done: 1 IP address (1 host up) scanned in 4.13 seconds
+
+
+Bei Nmap wird mit -sS oder -sU der entsprechende Identifier für offene Ports festgelegt. Hier in der Aufgabe wurd dies dann für scanme.nmap.org getestet.
+Bei diesem Prozess werden Pakete an eine bestimmte Auswahl von Ports oder an evtl. alle Ports auf dem Zielhost geschickt. Diese Pakete enthalten
+wahrscheinlich etwas kleines an Daten oder eine mögliche Anfrage, um von entsprechenden Ports eine Reaktion/Antwort zu bekommen. Zu Beginn habe ich den
+Test mit -sU also mit UDP-Paketen absolviert. Hier hatte ich zunächst die Vermutung, dass etwas nicht funktionierte, da es verhältnismäßig lange dauerte.
+Das die Dauer sich auf etwas mehr als 15 min. bezog, liegt darin, dass UDP ein verbindungsloses Protokoll, weshalb bei offenen Ports grundlegend eine Antwort also
+Reaktion des offenen Ports kommt und Nmap diesen vermerkt (open vermerkt offene Ports; filtered vermerkt Ports die Pakete über Firewall blockierten). 
+Bei geschlossenen Ports wird ein Error vermerkt bzw. erkannt (vernachlässigt), aber andere offene Ports, bei denen der Dienst mit UDP-Paketen nicht antwortet, werden 
+nach bestimmten Zeitintervallen anscheinend neue UDP-Pakete verschickt, um einem Pakteverlust vorzubeugen. Aufgrund dieser Wiederholung von verschickten Paketen, kann es 
+bei UDP-Scans tendenziell recht lange dauern. 
+
+Bei TCP, einem verbindungsorientiertem Protokoll, hierbei wird ein 3-Way Handshake verwendet. Also wird zunächst ein SYN-Paket geschickt, welches eine Synchronisations-Anfrage 
+enthält. Wenn ein SYN-ACK Paket zurückkommt, dann wird die Synchronisation vom Zielhost bestätigt, bevor die eigentliche Anfrage oder so vermittelt wird. Wenn diese auftritt, bzw. 
+zurückkommt, dann ist der entsprechende Port offen. Wenn ein RST, Reset-Paket, zurückkommt, dann ist der Port geschlossen und die Anfrage wird zurückgesetzt. Wenn aber keine Antwort
+zurückkommt, dann wird dieser als filtered vermerkt und wird wie beim UDP-Scan (gleicher Zielhost), möglicherweise von der Firewall abgefangen. Da TCP-Protokolle, aber grundlegend über
+die SYN und SYN-ACK Pakete eine Verbindung aufbauen, verläuft TCP schneller als UDP, da TCP hier schnelle zuordnen kann, wann eine Verbindung möglich ist und wann nicht. Bei UDP, dem 
+verbindungslosen Protokoll, kann es bei Ports, die von der Firewall abgefangen werden nicht ganz unterscheiden und muss neue Anfragen schicken, weshalb sich der Prozess enorm verzögern kann.
+
+Optionen für bessere bzw. schnellere UDP-Scans:
+	- "--host-timeout" & "--max-retries" beschränken die Wartezeit bzw. Wiederholungen, die zu diesen enormen Verzögerungen führen können.
+	- Je nach Anwendung kann man auch nur bestimmte Ports scannen oder "häufig genutzte Ports" mit "--top-ports xxx" wobei xxx die Anzahl an häufig genutzten Ports festlegt.
+	- Eine weitere Option ist "--min-parallelism" welches eine optimierte Parallelisierung zulässt, diese jedoch auch eine entsprechend hohe Netzwerklast hervorruft.
+
+
+# Beispiel mit Beschränkung auf 75 häufig genutzte Ports (83.63 seconds)
+
+C:\Users\User1>nmap -sU --top-ports 75 scanme.nmap.org
+Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-14 00:42 Mitteleuropõische Sommerzeit
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.17s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 68 closed udp ports (port-unreach)
+PORT    STATE         SERVICE
+68/udp  open|filtered dhcpc
+123/udp open          ntp
+135/udp open|filtered msrpc
+137/udp open|filtered netbios-ns
+138/udp open|filtered netbios-dgm
+139/udp open|filtered netbios-ssn
+445/udp open|filtered microsoft-ds
+
+Nmap done: 1 IP address (1 host up) scanned in 83.63 seconds
+
+
+## Aufgabe 4
+
+Zu Aufgabe 4 war die Idee eine Bestätigung (ACK) auf einen send() zu liefern, der das Signal gibt, wann man in den receive() gehen kann oder, ob man nach einem Timeout den
+entsprechenden Knoten vorher entfernen muss und sich den nächsten Knoten sucht, dem man einen Token sendet. Meine Implementierung ist nicht voll funktionsfähig, sie führt zwei Sequenzen durch,
+wird aber durch eine fehlerhafte Antwort abgebrochen. 
+KI war bei dieser Aufgabe meiner Meinung nach eher weniger vorteilhaft, da die Erklärungen sich widersprachen und sie meiste so Implementierungen wie folgt versuchte:
+
+
+	    boolean sent = false;
+            int attempts = rc.length(); // Versuche entsprechen der Anzahl der Ringmitglieder
+            while (attempts > 0 && !sent) {
+                Token.Endpoint next = rc.poll(); // hole den nächsten Knoten
+                try {
+                    System.out.println("Sende Token an: " + next);
+                    rc.incrementSequence();
+                    Thread.sleep(1000);
+                    rc.send(socket, next);
+                    // Bei Erfolg: den Knoten wieder ans Ende anhängen, um Reihenfolge zu erhalten
+                    rc.append(next);
+                    sent = true;
+                } catch (IOException e) {
+                    System.out.printf("Failed to send token to %s:%d → removing from ring\n",
+                            next.ip(), next.port());
+                    rc.removeNode(next); // Entferne den Knoten, wenn der Versand fehlschlägt
+                }
+                attempts--;
+            }
+
+            // Falls kein Knoten erreichbar ist, füge den eigenen Knoten hinzu
+            if (!sent) {
+                System.out.println("Kein erreichbarer Knoten gefunden. Selbst hinzufügen.");
+                rc.append(self);
+            }
+
+anstatt:
+		Token.Endpoint next = rc.poll();
+                rc.append(next);
+                rc.incrementSequence();
+                Thread.sleep(1000);
+                rc.send(socket, next);
+
+Funktioniert hat es nicht, da er bei allen Instanzen hängen blieb, sobald eine Instanz aus dem Ring
+rausgeflogen ist. Vermutung ist, dass er eben send() aufrief, aber die send() mit Tokens an den Knoten
+gingen der nun raus ist und die restlichen Instanzen nun im receive() hängen.
