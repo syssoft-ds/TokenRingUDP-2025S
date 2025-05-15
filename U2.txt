@@ -1,0 +1,208 @@
+							
+	
+								Blatt 2
+								Rechnernetze
+								Peter Kessler
+								1593158
+
+############################################################################################################################################################
+
+				Aufgabe 1:
+
+
+https://www.lanwan.ninja/
+
+1. Clue (Passwort):
+	Filter: http
+	Package: 213
+	Code (Passwort) = dzh20szq
+
+	=>Code war richtig
+	Neuer Hinweis (2. Clue): One HTTP error is different
+
+
+2. Clue (HTTP error):
+	Filter: http.response.code >= 400 
+	Package: 493
+	Code (in Fehlermeldung versteckt) = ra6rgv7h
+
+	=>Code war richtig
+	Neuer Hinweis (3. Clue): Hiddeninping
+
+
+3. Clue (Hiddeninping):
+	Filter: icmp (Zeigt alle Ping-Requests und -Antworten an)
+	Package: 342 oder 343 (beide haben den selben code versteckt)
+	Code = nd7hark3
+
+	=>Code war richtig
+	Final solution code: Q29uZ3JhdHNfVGhpc19Jc190aGVfQm9udXMh 
+
+
+############################################################################################################################################################
+
+
+				Aufgabe 2:
+
+1. Google (8.8.8.8)
+	Code:
+
+       "Routenverfolgung zu dns.google [8.8.8.8]
+	über maximal 30 Hops:
+	
+  	  1     3 ms     1 ms     1 ms  kabelbox [192.168.0.1]
+ 	  2    11 ms     8 ms    12 ms  ip5b4347fe.dynamic.kabel-deutschland.de [91.67.71.254]
+  	  3     9 ms    11 ms     9 ms  83-169-177-230-isp.superkabel.de [83.169.177.230]
+  	  4    18 ms    16 ms    14 ms  ip5886c2af.static.kabel-deutschland.de [88.134.194.175]
+  	  5    17 ms    17 ms    13 ms  145.254.3.168
+  	  6    14 ms    13 ms    14 ms  145.254.2.207
+  	  7    14 ms    16 ms    15 ms  74.125.51.10
+  	  8    15 ms    14 ms    17 ms  209.85.142.69
+  	  9    15 ms    16 ms    14 ms  142.250.214.191
+ 	 10    15 ms    14 ms    14 ms  dns.google [8.8.8.8]
+
+	Ablaufverfolgung beendet."
+
+2. Australian National University (www.anu.edu.au)
+	Code:
+
+       "Routenverfolgung zu terra-web.anu.edu.au [130.56.67.33]
+	über maximal 30 Hops:
+
+	  1     2 ms     3 ms     2 ms  kabelbox [192.168.0.1]
+	  2    12 ms    13 ms    55 ms  ip5b4347fe.dynamic.kabel-deutschland.de [91.67.71.254]
+	  3     9 ms    10 ms     8 ms  83-169-177-230-isp.superkabel.de [83.169.177.230]
+	  4     *       17 ms    15 ms  ip5886c2af.static.kabel-deutschland.de [88.134.194.175]
+	  5    16 ms    15 ms    16 ms  145.254.3.168
+	  6    16 ms    15 ms    14 ms  145.254.2.179
+	  7    20 ms    15 ms    14 ms  de-cix.fra.zayo.com [80.81.192.255]
+	  8   158 ms   156 ms   155 ms  ae1.cs1.fra6.de.eth.zayo.com [64.125.29.56]
+	  9   155 ms   156 ms   155 ms  ae2.cs1.ams17.nl.eth.zayo.com [64.125.29.59]
+	 10   157 ms     *        *     ae4.cs3.ams10.nl.eth.zayo.com [64.125.28.37]
+	 11   152 ms   152 ms   154 ms  ae10.cr1.lhr15.uk.eth.zayo.com [64.125.29.17]
+	 12     *      154 ms   155 ms  ae2.cr1.lhr11.uk.zip.zayo.com [64.125.24.140]
+	 13     *        *        *     Zeitüberschreitung der Anforderung.
+	 14     *      154 ms     *     ae0.cs2.lga5.us.eth.zayo.com [64.125.29.187]
+	 15     *        *        *     Zeitüberschreitung der Anforderung.
+	 16   158 ms   156 ms   157 ms  ae16.cr2.ord9.us.zip.zayo.com [64.125.25.234]
+	 17   155 ms   156 ms   156 ms  ae12.cr1.sea1.us.zip.zayo.com [64.125.19.4]
+	 18     *        *        *     Zeitüberschreitung der Anforderung.
+	 19   155 ms   156 ms   156 ms  ae27.mpr1.sea1.us.zip.zayo.com [64.125.29.1]
+	 20   153 ms   155 ms   154 ms  64.125.193.130.i223.above.net [64.125.193.130]
+	 21   290 ms   306 ms   294 ms  et-10-0-5.170.pe1.brwy.nsw.aarnet.net.au [113.197.15.62]
+	 22   292 ms   290 ms   293 ms  et-1-1-0.pe1.rsby.nsw.aarnet.net.au [113.197.15.12]
+	 23   295 ms   299 ms   294 ms  et-0-3-0.pe1.actn.act.aarnet.net.au [113.197.15.11]
+	 24     *        *        *     Zeitüberschreitung der Anforderung.
+	 25     *        *        *     Zeitüberschreitung der Anforderung.
+	 26     *        *        *     Zeitüberschreitung der Anforderung.
+	 27     *        *        *     Zeitüberschreitung der Anforderung.
+	 28     *        *        *     Zeitüberschreitung der Anforderung.
+	 29     *        *        *     Zeitüberschreitung der Anforderung.
+	 30     *        *        *     Zeitüberschreitung der Anforderung.
+	
+	Ablaufverfolgung beendet."
+
+
+=> Der Traceroute Bericht listet die Daten aller Router an, die die Pakete bis 
+   zum Ziel durchlaufen. Die Zeitangaben entsprechen der Dauer, die ICMP-Pakete
+   vom Computer zum Router zurückzusenden. Man erkennt, dass die ersten 5 Hops 
+   identische Namen und IP-Adressen besitzen, was natürlich logisch ist.
+   Bei dem Tracerouting der Australian National University Website finden 
+   logischer Weise viel mehr Hops statt; zudem kam es ab dem 24. Hop zu 
+   kompletten Timeouts. Dies hat vermutlich Firewall-technische Gründe oder es
+   herrschen Verbindungsprobleme.
+
+
+############################################################################################################################################################
+
+
+				Aufgabe 3:
+
+1. "nmap -sU scanme.nmap.org"
+
+	Ausgabe:
+	
+       "Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-10 12:10 Mitteleuropõische Sommerzeit
+	Nmap scan report for scanme.nmap.org (45.33.32.156)
+	Host is up (0.17s latency).
+	Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+	Not shown: 996 closed udp ports (port-unreach)
+	PORT    STATE         SERVICE
+	67/udp  open|filtered dhcps
+	68/udp  open|filtered dhcpc
+	123/udp open          ntp
+	162/udp open|filtered snmptrap
+	
+	Nmap done: 1 IP address (1 host up) scanned in 1067.60 seconds"
+
+2. "nmap -sS scanme.nmap.org"
+
+	Ausgabe:
+
+       "Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-10 12:32 Mitteleuropõische Sommerzeit
+	Nmap scan report for scanme.nmap.org (45.33.32.156)
+	Host is up (0.17s latency).
+	Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+	Not shown: 996 closed tcp ports (reset)
+	PORT      STATE SERVICE
+	22/tcp    open  ssh
+	80/tcp    open  http
+	9929/tcp  open  nping-echo
+	31337/tcp open  Elite
+	
+	Nmap done: 1 IP address (1 host up) scanned in 4.68 seconds"
+
+
+=> Man sieht also, dass der Scan der TCP-Ports (4.68s) DEUTLICH schneller ist als 
+   der UDP-Scan (1067.60s, also fast 18 min).
+   Dies hat folgende Gründe:
+   	-Bei UDP sind die Timeouts länger eingestellt, was in der Summe schnell zu 
+          hohen Wartezeiten führt
+   	-UDP-Scans werden von vielen Firewalls und Systemen blockiert
+	-bei TCP hingegen kann nmap schnell und effizient die Ports scannen, 
+          z.B. mit SYN-Scan oder ACK-Scan
+
+   Um den UDP-Scan zu beschleunigen, gibt es u.A. folgende Möglichkeiten:
+	-Beschränken der Anzahl der UDP-Ports auf bekannte oder verdächtige
+	-nmap-Einstellungen wie T4: Kompromiss zwischen Schnelligkeit & Genauigkeit
+	-Timeout begrenzen
+	-Scans parallelisieren		
+
+
+############################################################################################################################################################
+
+
+				Aufgabe 4:
+
+Zusammenfassung der Änderungen:
+
+    1. Fehlerbehandlung bei ausgefallenen Knoten:
+	Wenn ein Knoten ausfällt (also IOException beim Senden des Tokens auftritt), 
+        wird der Knoten nicht wieder in den Ring aufgenommen.
+	Fehlerbehandlung: Der Knoten wird automatisch aus der Ringstruktur entfernt. 
+	Das passiert, indem wir den Knoten nicht mehr an den Token anhängen, 
+	nachdem der Sendefehler passiert ist.
+
+    2. Verbesserte Dokumentation des Codes:
+	JavaDoc-Kommentare für die TokenRing-Klasse und die loop()-Methode hinzugefügt.
+	Das macht den Code für andere lesbar und verständlich.
+
+    3. Fehlerbehandlung in der loop()-Methode optimiert:
+	Der Code wartet nun darauf, dass das Token erfolgreich an den nächsten Knoten 
+	gesendet wird, bevor der Knoten wieder in den Ring aufgenommen wird.
+	Nutzung von try-catch für den Fall, dass das Senden des Tokens fehlschlägt 
+	(wegen eines ausgefallenen Knotens).
+
+    4. Stabilisierung des Ring-Netzwerks:
+	Der Ring reorganisiert sich automatisch, ohne dass manuell etwas angepasst 
+	werden muss, wenn ein Knoten ausfällt.
+	Der Algorithmus stellt sicher, dass der Token auch dann weitergeleitet wird, 
+	wenn ein Knoten nicht erreichbar ist.
+
+Note: Ich habe, wie in der Aufgabe explizit verlangt, ChatGTP zum Erklären des Codes,
+      des Problems, und für Vorschläge zur Änderung genutzt. Ich habe zum Testen des
+      Codes wieder Lokal einen Ring erstellt und dann einen Member bewusst rausgenommen.
+      Beim ersten mal hat sich der Ring dadurch aufgehangen, nach einer erneuten 
+      Initialisierung lief der Ring, wie gewünscht, nach dem Ausfallen eines Members 
+      weiter.
+	
