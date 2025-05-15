@@ -1,12 +1,21 @@
 import java.io.IOException;
 import java.net.*;
-import java.util.LinkedList;
+//import java.util.LinkedList;
+import java.util.*;
 
 
 public class TokenRing {
 
     private static void loop(DatagramSocket socket, String ip, int port, boolean first){
+    	
+    	//Änderung A4
+    	private static final long TIMEOUT = 5000; // wenn nach 5 Sekunden keine Nachricht kommt, wird der Knoten als offline markiert
+
+        private static void loop(DatagramSocket socket, String ip, int port, boolean first) {
         LinkedList<Token.Endpoint> candidates = new LinkedList<>();
+        
+        Map<Token.Endpoint, Long> lastSeen = new HashMap<>(); // Aufzeichnen der letzten Antwort
+        
         if (first) {
             candidates.add(new Token.Endpoint(ip, port));
         }
@@ -16,8 +25,29 @@ public class TokenRing {
                 System.out.printf("Token: seq=%d, #members=%d", rc.getSequence(), rc.length());
                 for (Token.Endpoint endpoint : rc.getRing()) {
                     System.out.printf(" (%s, %d)", endpoint.ip(), endpoint.port());
+                    lastSeen.put(endpoint, System.currentTimeMillis()); // Aufzeichnungszeit aktualisieren
                 }
                 System.out.println();
+                
+                //Überprüfung der Timeout-Daten der Knoten & Entfernugn von Knoten, die offline sind
+                
+                LinkedList<Token.Endpoint> failedNodes = new LinkedList<>();
+                long currentTime = System.currentTimeMillis();
+                
+                for (Map.Entry<Token.Endpoint, Long> entry : lastSeen.entrySet()) {
+                    if (currentTime - entry.getValue() > TIMEOUT) {
+                        System.out.println("Node " + entry.getKey() + " seems to have failed.");
+                        failedNodes.add(entry.getKey());
+                    }
+                }
+                
+                for (Token.Endpoint failedNode : failedNodes) {
+                    rc.removeKnoten(failedNode);
+                    lastSeen.remove(failedNode);
+                }
+                
+                //----------------------------------------------------------------------------------
+                
                 if (rc.length() == 1) {
                     candidates.add(rc.poll());
                     if (!first) {
@@ -35,10 +65,12 @@ public class TokenRing {
                 Thread.sleep(1000);
                 rc.send(socket, next);
             }
-            catch (IOException e) {
+            
+            catch (IOException e) {            
                 System.out.println("Error receiving packet: " + e.getMessage());
             }
-            catch (Exception e) {
+        
+            catch (Exception e) {           
                 System.out.println("Error: " + e.getMessage());
             }
         }

@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 public class Token {
 
@@ -88,5 +89,17 @@ public class Token {
 
     public static Token fromJSON(String json) throws IOException {
         return serializer.readValue(json, Token.class);
+    }
+    
+    public Token removeKnoten(Endpoint endpointToRemove) {
+        Token newToken = new Token();
+        for (Endpoint endpoint : this.ring) {
+            if (!endpoint.equals(endpointToRemove)) {
+                newToken.append(endpoint);
+            }
+        }
+        this.ring.clear();
+        this.ring.addAll(newToken.ring);
+        return this;
     }
 }
