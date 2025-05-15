@@ -1,0 +1,68 @@
+Aufgabe 1
+
+1. frame contains "password"
+2. http matches "error"
+3. icmp
+
+Aufgabe 2
+
+Durch den Traceroute-Befehl können alle Knotenpunkte angezeigt werden, die Pakete vom eigenen Rechner zu bspw. einer Website passieren müssen. Anhand der Latenzen (in ms) kann man abschätzen, wie weit ein Router geografisch entfernt ist.
+
+Ausgabe im Terminal:
+
+traceroute to www.anu.edu.au (130.56.67.33), 30 hops max, 60 byte packets
+ 1  compalhub.home (192.168.0.1)  4.894 ms  4.776 ms  4.740 ms
+ 2  * * *
+ 3  ip5886c969.static.kabel-deutschland.de (88.134.201.105)  25.756 ms ip5886cb79.static.kabel-deutschland.de (88.134.203.121)  27.641 ms  34.166 ms
+ 4  145.254.3.168 (145.254.3.168)  34.115 ms 145.254.3.170 (145.254.3.170)  30.826 ms 145.254.3.168 (145.254.3.168)  34.012 ms
+ 5  145.254.2.179 (145.254.2.179)  30.724 ms 145.254.2.209 (145.254.2.209)  30.674 ms 145.254.2.207 (145.254.2.207)  33.859 ms
+ 6  * * *
+ 7  ae12.cs1.fra6.de.eth.zayo.com (64.125.26.172)  180.806 ms ae1.cs1.fra6.de.eth.zayo.com (64.125.29.56)  173.709 ms *
+ 8  * * *
+ 9  * * *
+10  * * *
+11  * * *
+12  * * *
+13  * * *
+14  * * *
+15  * * *
+16  * * *
+17  * * *
+18  * * *
+19  64.125.193.130.i223.above.net (64.125.193.130)  166.665 ms  166.581 ms  166.507 ms
+20  et-10-0-5.170.pe1.brwy.nsw.aarnet.net.au (113.197.15.62)  397.764 ms  397.694 ms  397.621 ms
+21  et-1-1-0.pe1.rsby.nsw.aarnet.net.au (113.197.15.12)  296.582 ms  295.935 ms  296.713 ms
+22  et-0-3-0.pe1.actn.act.aarnet.net.au (113.197.15.11)  297.419 ms  298.252 ms  297.300 ms
+23  138.44.161.3 (138.44.161.3)  301.352 ms  301.293 ms  301.221 ms
+24  core-te-1-1-4.anu.edu.au (150.203.201.5)  301.927 ms  301.860 ms  301.806 ms
+25  vlan-2100-palo.anu.edu.au (150.203.201.33)  410.055 ms  409.949 ms  409.892 ms
+26  tuckwell.anu.edu.au (130.56.67.33)  349.968 ms  349.556 ms  344.332 ms
+27  * * *
+28  * * *
+29  * * *
+30  * * *
+
+Erklärung:
+
+Überall, wo "* * *" steht, gibt es keine Antwort auf die Ankunft der Pakete.
+
+1: Pakete befinden sich beim Heimrouter.
+3-5: Pakete werden über das Vodafone-Netzwerk Deutschland geroutet.
+7: Pakete werden internationalem Netzwerk zayo.com übergeben, vermutlich aus Frankfurt heraus.
+19: Pakete passiert ein internationales Transitnetz.
+20-22: Pakete erreichen das Bildungsnetzwerk Academic and Research Network of Australia.
+23: Pakete erreichen Übergabepunkt ans ANU-Netz
+24-26: Über konkrete Router wird das Endziel tuckwell.anu.edu.au erreicht.
+
+
+Aufgabe 3
+
+Der Scan mit UDP-Ports ist wesentlich langsamer als der Scan mit TCP-Ports. Das liegt daran, dass bei offenen Ports nicht unbedingt eine Antwort zurückgeliefert wird. Bei geschlossenen Ports kann es sein, dass eine ICMP-Meldung zurückgegeben wird, aber diese werden durch viele Firewalls oder Provider blockiert. Entsprechend muss Nmap ein paar Sekunden pro Port abwarten, ob eine Meldung eintrifft. Je nachdem, wie viele Ports passiert werden, summiert sich die Wartezeit zu einer großen Verzögerung auf.
+Bei dem Scan mit TCP-Ports antworten sowohl offene als auch geschlossene Ports, bevor Pakete an sie verschickt werden. Da immer eine Antwort gegeben wird, entfallen Wartezeiten.
+
+Man kann den Scan mit UDP-Ports auf verschiedene Arten beschleunigen. Man kann die Wartezeit verkürzen, um so schneller zu sein. Dadurch werden aber langsame offene Ports vom Scan ausgeschlossen. Eine weitere Möglichkeit wäre die Einschränkung des Scans auf bekannte Ports. Ebenfalls kann man den Scan auch parallelisiert durchführen lassen.
+
+
+Aufgabe 4
+
+Ich habe den Code (meiner Meinung nach) sinnvoll erweitert. Doch auch nach längerem ausprobieren verweilten zwei Knoten auf "sending", wenn ich einen dritten Knoten aus dem Ring entfernt habe.

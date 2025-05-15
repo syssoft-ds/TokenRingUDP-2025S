@@ -29,11 +29,38 @@ public class TokenRing {
                     rc.append(candidate);
                 }
                 candidates.clear();
-                Token.Endpoint next = rc.poll();
-                rc.append(next);
-                rc.incrementSequence();
-                Thread.sleep(1000);
-                rc.send(socket, next);
+
+                //Aenderungen hinzugefügt
+
+                Token.Endpoint me = new Token.Endpoint(ip, port);
+
+                boolean sent = false;
+                int attempts = rc.length();
+
+                for (int i = 0; i < attempts; i++) {
+                    Token.Endpoint next = rc.poll();
+                    if (next.ip().equals(ip) && next.port() == port) {
+                        rc.append(next);
+                        continue;
+                    }
+
+                    try {
+                        rc.append(me);
+                        rc.incrementSequence();
+                        Thread.sleep(1000);
+                        rc.send(socket, next);
+                        sent = true;
+                        break;
+                    } catch (IOException e) {
+                        System.out.printf("Knoten %s:%d nicht erreichbar – wird entfernt.\n", next.ip(), next.port());
+                    }
+                }
+
+                if (!sent) {
+                    System.out.println("Kein erreichbarer Knoten im Ring – warte...");
+                    Thread.sleep(1000);
+                    rc.append(me);
+                }
             }
             catch (IOException e) {
                 System.out.println("Error receiving packet: " + e.getMessage());
