@@ -29,11 +29,26 @@ public class TokenRing {
                     rc.append(candidate);
                 }
                 candidates.clear();
-                Token.Endpoint next = rc.poll();
+                /*Token.Endpoint next = rc.poll();
                 rc.append(next);
                 rc.incrementSequence();
                 Thread.sleep(1000);
-                rc.send(socket, next);
+                rc.send(socket, next);*/
+
+                boolean sent = false;
+                while (!sent && rc.length() > 0) {
+                    Token.Endpoint candidate = rc.poll(); // hole nächsten möglichen Knoten
+                    try {
+                        rc.append(candidate);             // zurück ans Ende des Rings
+                        rc.incrementSequence();
+                        Thread.sleep(1000);
+                        rc.send(socket, candidate);       // Versuch: senden
+                        sent = true;                      // hat geklappt
+                    } catch (IOException e) {
+                        System.out.printf("Knoten %s:%d nicht erreichbar – entferne aus Ring\n", candidate.ip(), candidate.port());
+                        rc.remove(candidate);             // aus Ring entfernen
+                    }
+                }
             }
             catch (IOException e) {
                 System.out.println("Error receiving packet: " + e.getMessage());
@@ -43,6 +58,8 @@ public class TokenRing {
             }
         }
     }
+
+
 
     public static void main(String[] args) {
         try (DatagramSocket socket = new DatagramSocket()) {

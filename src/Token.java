@@ -89,4 +89,8 @@ public class Token {
     public static Token fromJSON(String json) throws IOException {
         return serializer.readValue(json, Token.class);
     }
+
+    public boolean remove(Endpoint endpoint) {
+        return ring.remove(endpoint);
+    }
 }
