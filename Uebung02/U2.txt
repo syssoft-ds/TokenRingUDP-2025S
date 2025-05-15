@@ -1,0 +1,168 @@
+Maxim Smirnov
+
+Aufgabe 1)
+
+Zuallererst habe ich mit dem Hinweis "Find the password" und dem Cheat-Sheet Wireshark Class 4 den Filter
+"tcp matches "password"" verwendet und das Paket mit dem Passwort gefunden. Das Passwort lautet "dzh20szq".
+
+Der nächste Hinweis, den ich auf der Website bekommen habe, war: "One HTTP error is different".
+Nachdem ich erneut im Cheat-Sheet nachgeschaut habe, nutzte ich den Filter http.response.code > 200,
+und ein HTTP-Paket hatte die Response Phrase "ra6rgv7h", die sich von den anderen Paketen abhob.
+Also lautet der Code "ra6rgv7h".
+
+Der weitere Hinweis, den ich erhalten habe, war: "Hidden in ping".
+Mit icmp fand ich in den "Ping-Paketen" im Data-Bereich den Text "nd7hark3".
+
+Der Finale Code auf der Website lautet dann "Q29uZ3JhdHNfVGhpc19Jc190aGVfQm9udXMh".
+Die Bedeutung dieses Codes fand ich nur mit ChatGPT heraus.
+Es bedeutet dekodiert aus Base64 "Congrats_This_Is_the_Bonus!"
+
+Aufgabe 2)
+In Windows habe ich den Befehl "tracert anu.edu.au" in der CMD ausgeführt. Dann stellte ich fest, dass die Pakete zu
+lange brauchten und ich nicht bis zum Ziel ankam. Mit "tracert -w 60000 anu.edu.au", also mit einem Timeout von 60sec
+versuchte ich es erneut, aber es kam immer trotzdem nicht an. Unten zu sehen ist das Ergebnis des Befehls:
+
+Routenverfolgung zu anu.edu.au [130.56.67.33]
+über maximal 30 Hops:
+
+  1     1 ms     1 ms     2 ms  fritz.box [192.168.178.1]
+  2    10 ms    10 ms    10 ms  192.168.203.27
+  3     9 ms     8 ms     9 ms  192.168.125.2
+  4     9 ms     5 ms     7 ms  192.168.125.11
+  5    13 ms     9 ms     9 ms  252-145-088-212.ip-addr.vsenet.de [212.88.145.252]
+  6     8 ms     9 ms    10 ms  et-2-0-5.0.vs-core-r2.6838.ip.vsenet.de [217.24.235.185]
+  7    22 ms     8 ms     9 ms  et-2-0-2.0.vs-core-r1.6838.ip.vsenet.de [217.24.235.177]
+  8    14 ms    13 ms    11 ms  ffm-b16-link.ip.twelve99.net [62.115.156.76]
+  9    15 ms    11 ms    11 ms  ffm-bb2-link.ip.twelve99.net [62.115.132.228]
+ 10     *        *        *     Zeitüberschreitung der Anforderung.
+
+Der Befehl sendet drei Pakete an die Zieladresse und wartet auf eine Antwort. Die ms-Angaben sind die
+Rückmeldungen/Antwortzeiten zu diesen Paketen an den einzelnen Stationen. Jede Station erhöht die Anzahl der Hops um 1,
+indem in den Paketen die TTL um 1 verringert wird. (Jeder Paket startet im Beispiel oben mit einer TTL von 30)
+Die ersten drei Hops gehören zum lokalen Netzwerk bzw. zum ISP-Netzwerk (laut ChatGPT).
+Hop 5 ist das Gateway des ISPs, also des Internetanbieters.
+Ab Hop 8 befinden sich die Pakete in einem globalen Backbone-Netzwerk in Frankfurt (erkennbar an „ffm“),
+das die Pakete an den Zielserver weiterleiten sollte, was jedoch aus irgendeinem Grund nicht funktioniert hat.
+Danach folgten keine weiteren Antworten.
+
+Aufgabe 3)
+
+UDP Scan:
+
+Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-07 16:24 Mitteleuropõische Sommerzeit
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.17s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 992 closed udp ports (port-unreach)
+PORT    STATE         SERVICE
+67/udp  open|filtered dhcps
+68/udp  open|filtered dhcpc
+123/udp open          ntp
+135/udp open|filtered msrpc
+137/udp open|filtered netbios-ns
+138/udp open|filtered netbios-dgm
+139/udp open|filtered netbios-ssn
+445/udp open|filtered microsoft-ds
+
+Nmap done: 1 IP address (1 host up) scanned in 1071.11 seconds
+
+TCP Scan:
+
+C:\Windows\System32>nmap -sS scanme.nmap.org
+Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-07 16:42 Mitteleuropõische Sommerzeit
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.16s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 993 closed tcp ports (reset)
+PORT      STATE    SERVICE
+22/tcp    open     ssh
+80/tcp    open     http
+135/tcp   filtered msrpc
+139/tcp   filtered netbios-ssn
+445/tcp   filtered microsoft-ds
+9929/tcp  open     nping-echo
+31337/tcp open     Elite
+
+Nmap done: 1 IP address (1 host up) scanned in 3.83 seconds
+
+
+Der TCP-Scan ist wesentlich schneller als der UDP-Scan. 3.83 Sekunden im Vergleich zu 1071.11 Sekunden. Das liegt daran
+das TCP eine Verbindung aufbaut und UDP verbindungslos ist. Wenn TCP einen Port scannt, dann macht er einen baut er eine
+Verbindung auf mit dem Server, also bekommt eine Rückmeldung -> 3-way handshake.
+Bei geschlossenen Ports wird ein Reset-Paket zurückgeschickt, bei offenen Ports wird ein SYN-ACK-Paket zurückgeschickt.
+(laut ChatGPT)
+Das heißt der TCP Scan ist schneller, weil er immer eine Rückmeldung bekommt. UDP-Scans hingegen bekommen keine
+Rückmeldung, wenn der Port offen ist kommt nichts zurück. Wenn der Port geschlossen ist, dann kommt ein
+ICMP Port Unreachable zurück. (laut ChatGPT)
+Beim Scan muss also gewartet werden ob eine Rückmeldung überhaupt kommt.
+
+Chat-GPT hat mir -T4 empfohlen, aber laut "https://nmap.org/book/man-performance.html" beeinflusst das eher Parameter
+die für TCP wichtig sind, aber auch den Parameter --max-rtt-timeout, was ebenfalls für UDP-Scans wichtig ist.
+
+- mit -F im Befehl kann man nur die beliebtesten 100-UDP-Ports scannen
+- mit --max-scan-delay 100ms wartet nmap maximal 100ms bis es das nächste Paket sendet (anstatt 1sec)
+- -T4 setzt unter anderem --max-rtt-timeout 1250ms, also anstatt 10 sec nur 1,25 sec warten bis eine Antwort kommt.
+
+
+Ausgeführter Befehl: nmap -sU -F -T4 --max-scan-delay 100ms scanme.nmap.org
+
+Ausgabe:
+
+Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-07 17:16 Mitteleuropõische Sommerzeit
+Warning: 45.33.32.156 giving up on port because retransmission cap hit (6).
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.17s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 62 closed udp ports (port-unreach), 37 open|filtered udp ports (no-response)
+PORT    STATE SERVICE
+123/udp open  ntp
+
+Nmap done: 1 IP address (1 host up) scanned in 59.33 seconds
+
+Also mit den neuen Parametern hat der Scan nur 59.33 Sekunden gedauert, anstatt 1071.11 Sekunden, jedoch fehlten einige
+Ports im Vergleich zum ersten Scan.
+
+Aufgabe 4)
+
+siehe "TokenRingDelete.java" und "Token.java" in src Ordner.
+
+Jeder Knoten setzt einen receive-Timeout dynamisch mit der Anzahl der Knoten im Tokenring-Netzwerk -> Für
+jeden Knoten +1,5 sec.
+Wenn ein Knoten entfernt wird, werden die übrig gebliebenen Knoten einen Timeout feststellen und einen Ping an den
+nächsten Knoten schicken, welcher mit Pong bestätigt werden muss, wenn dies nicht geschieht wird dieser Knoten gelöscht
+und der Token wird an den nächsten folgenden Knoten gesendet.
+Das Token.receive() wurde so angepasst, dass es einen Ping empfangen kann und auf diesen mit Pong antwortet. Im Loop wird
+falls ein Ping im TokenRingDelete.receive() empfangen wird, dieses rekursiv erneut aufgerufen, damit wieder auf
+das nächste Token gewartet wird. Erst wenn wirklich ein Token empfangen wird, wird der Loop weitergeführt.
+
+Beispiel-Ablauf:
+
+1.Knoten (Port: 62279):
+
+Sending {"sequence":14,"ring":[{"ip":"192.168.178.21","port":62323},{"ip":"192.168.178.21","port":62279},{"ip":"192.168.178.21","port":62324}]} to 192.168.178.21:62324
+Sent ping to 192.168.178.21:62324
+Received pong from next Node
+
+2.Knoten (Port: 62324):
+
+Sending {"sequence":15,"ring":[{"ip":"192.168.178.21","port":62279},{"ip":"192.168.178.21","port":62324},{"ip":"192.168.178.21","port":62323}]} to 192.168.178.21:62323
+Received ping from 192.168.178.21:62279
+Return Pong to Sender
+Received Ping. Return to receive.
+Sent ping to 192.168.178.21:62323
+No response from 192.168.178.21:62323. Node is considered dead.
+Removing 192.168.178.21:62323
+Removed dead node 192.168.178.21:62323 from the ring.
+Sending {"sequence":15,"ring":[{"ip":"192.168.178.21","port":62324},{"ip":"192.168.178.21","port":62279}]} to 192.168.178.21:62279
+Token sent to new next node 192.168.178.21:62279
+
+3.Knoten (Port: 62323) wurde entfernt...
+
+
+Hier sieht man dass der erste Knoten einen Ping an den zweiten Knoten geschickt hat, der dann mit Pong bestätigt wurde.
+Bei dem ersten Knoten wird der receive-Timeout zurückgesetzt, weil der Knoten noch lebt. Dieser wird warten bis ein neuer
+Token kommt. Der zweite Knoten hat den Timeout noch nicht erkannt, und wird angepingt und bestätigt mit Pong den ersten
+Knoten das er noch lebt. (Received Pong. Return to receive.) Der zweite Knoten schickt dann einen Ping an den dritten
+Knoten, der antwortet nicht, da er entfernt wurde.
+Der zweite Knoten markiert den dritten Knoten als tot und schickt den Token an den ersten Knoten, damit der Ring weiter
+arbeiten kann.
