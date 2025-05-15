@@ -1,0 +1,33 @@
+	Aufgabe 1:
+data.len == 8 (Paket hatte Zeichenkette für finale Page)
+
+____________________________________________________________________________________
+
+	Aufgabe 2:
+Terminal:
+PS C:\Users\jonas> tracert www.anu.edu.au
+
+Routenverfolgung zu terra-web.anu.edu.au [130.56.67.33]
+über maximal 30 Hops:
+
+  1     2 ms     2 ms     1 ms  fritz.box [...]
+  2    10 ms     9 ms     8 ms  p3e9bf679.dip0.t-ipconnect.de [62.155.246.121]
+  3    14 ms    12 ms    12 ms  f-eh1-i.F.DE.NET.DTAG.DE [62.154.16.38]
+  4    13 ms    12 ms    11 ms  193.158.39.70
+  5     *        *        *     Zeitüberschreitung der Anforderung.
+  6    27 ms    29 ms    28 ms  AARNET-PTY.ear4.London1.Level3.net [217.163.113.74]
+  7   303 ms   305 ms   302 ms  et-0-3-0.pe1.actn.act.aarnet.net.au [113.197.15.11]
+  8     *        *        *     Zeitüberschreitung der Anforderung.
+  9     *        *        *     Zeitüberschreitung der Anforderung.
+  .					.
+  .					.
+  .					.
+ 30     *        *        *     Zeitüberschreitung der Anforderung.
+
+------------------------------------------------------------------------------------
+
+Die Traceroute zur Australian National University zeigt den Weg der Daten von meinem lokalen Netzwerk in Deutschland bis nach Australien. Der erste Hop ist der Heimrouter („fritz.box“), gefolgt von mehreren Stationen im Netz der Deutschen Telekom. Ab Hop 6 wird ein Übergang ins internationale Netz sichtbar: Hier erscheint ein Server von AARNet in London, was auf den Einstieg ins australische Wissenschaftsnetz hinweist. Mit Hop 7 erreicht das Signal Australien, genauer das Academic Network im Australian Capital Territory (ACT). Die hohe Latenz (~300 ms) bestätigt die weite geografische Strecke. Ab Hop 8 antworten mehrere Stationen nicht mehr, was auf Firewalls oder Sicherheitsrichtlinien schließen lässt – der Weg wird dennoch fortgesetzt. Damit lassen sich drei Hauptebenen erkennen: das lokale Heim- und Providernetz, die internationale Backbone-Verbindung über London und schließlich der Einstieg ins australische Wissenschaftsnetz.
+____________________________________________________________________________________
+
+	Aufgabe 3:
+Ein TCP-Scan mit nmap -sS ist deutlich schneller als ein UDP-Scan mit nmap -sU, da TCP ein verbindungsorientiertes Protokoll ist. Offene TCP-Ports antworten zuverlässig mit einem SYN-ACK, wodurch Nmap schnell feststellen kann, ob ein Port offen ist. UDP hingegen ist verbindungslos – offene Ports antworten oft gar nicht, während geschlossene Ports meist eine ICMP-Fehlermeldung senden. Da Nmap im Zweifelsfall auf eine Antwort warten muss, entstehen beim UDP-Scan deutlich längere Wartezeiten. Zusätzlich werden ICMP-Antworten häufig von Firewalls gefiltert oder verzögert, was den Scan weiter verlangsamt. Um UDP-Scans zu beschleunigen, kann man die Zahl der gescannten Ports begrenzen, Timeout- und Wiederholungswerte anpassen oder die Scanrate erhöhen – Letzteres jedoch auf Kosten der Unauffälligkeit.

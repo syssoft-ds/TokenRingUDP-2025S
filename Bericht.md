@@ -1,3 +1,4 @@
+
 Da ich mit einer Grippe im Bett lag, konnte ich mich leider nicht mit anderen zusammentun,
 um gemeinsam einen Tokenring aufzubauen. Also beschreibe ich die erste Aufgabe anstatt der Zweiten.
 

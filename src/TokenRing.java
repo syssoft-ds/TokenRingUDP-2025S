@@ -5,40 +5,88 @@ import java.util.LinkedList;
 
 public class TokenRing {
 
-    private static void loop(DatagramSocket socket, String ip, int port, boolean first){
+
+    private static void loop(DatagramSocket socket, String ip, int port, boolean first) {
         LinkedList<Token.Endpoint> candidates = new LinkedList<>();
         if (first) {
             candidates.add(new Token.Endpoint(ip, port));
         }
+
+        boolean wasEverInRing = first;
+
         while (true) {
             try {
+                socket.setSoTimeout(10000);
+
                 Token rc = Token.receive(socket);
+
+                wasEverInRing = true;
+
                 System.out.printf("Token: seq=%d, #members=%d", rc.getSequence(), rc.length());
                 for (Token.Endpoint endpoint : rc.getRing()) {
                     System.out.printf(" (%s, %d)", endpoint.ip(), endpoint.port());
                 }
                 System.out.println();
+
+                // Eigene Adresse hinzufügen, wenn nur ein Knoten da ist
                 if (rc.length() == 1) {
                     candidates.add(rc.poll());
-                    if (!first) {
-                        continue;
-                    }
+                    if (!first) continue;
                 }
+
                 first = false;
+
+                // Neue Kandidaten hinzufügen
                 for (Token.Endpoint candidate : candidates) {
                     rc.append(candidate);
                 }
                 candidates.clear();
-                Token.Endpoint next = rc.poll();
-                rc.append(next);
-                rc.incrementSequence();
-                Thread.sleep(1000);
-                rc.send(socket, next);
-            }
-            catch (IOException e) {
+
+                boolean sent = false;
+                int attempts = rc.length(); // max. so viele Versuche wie Mitglieder
+                while (!sent && attempts > 0) {
+                    Token.Endpoint next = rc.poll();
+                    try {
+                        rc.append(next); // wieder hinten anhängen
+                        rc.incrementSequence();
+                        Thread.sleep(1000);
+                        rc.send(socket, next);
+                        sent = true;
+                    } catch (IOException e) {
+                        System.out.println("Reaching member impossible: " + next.ip() + ":" + next.port() + ", will be removed.");
+                        // nicht wieder anhängen => wird entfernt
+                    }
+                    attempts--;
+                }
+
+                if (!sent) {
+                    System.out.println("No accessible member in ring!");
+                    Thread.sleep(2000); // Warten und hoffen, dass jemand zurückkommt
+                }
+            }  catch (SocketTimeoutException e) {
+                System.out.println("Timeout – Token may got lost.");
+                // Bedingung: Nur Token neu erzeugen, wenn nichts kam
+                if (first || wasEverInRing) {
+                    System.out.println("Creating new token and restarting ring.");
+                    Token newToken = new Token().append(ip, port);
+                    for (Token.Endpoint candidate : candidates) {
+                        newToken.append(candidate);
+                    }
+                    candidates.clear();
+                    newToken.incrementSequence();
+                    if (newToken.length() > 0) {
+                        Token.Endpoint next = newToken.poll();
+                        newToken.append(next);
+                        try {
+                            newToken.send(socket, next);
+                        } catch (IOException ex) {
+                            System.out.println("Sending token to " + next + " was impossible.");
+                        }
+                    }
+                }
+            } catch (IOException e) {
                 System.out.println("Error receiving packet: " + e.getMessage());
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
         }
