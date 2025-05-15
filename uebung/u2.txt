@@ -1,0 +1,248 @@
+Aufgabe 1
+
+Display filter:
+http contains "username" && http contains "password" 
+
+String: dzh20szq
+URL: https://www.lanwan.ninja/dzh20szq/
+
+Display filter:
+http.response.code>=400
+
+String: ra6rgv7h
+URL: https://www.lanwan.ninja/ra6rgv7h/
+
+Display filter:
+icmp
+
+String: nd7hark3
+URL: https://www.lanwan.ninja/nd7hark3/
+
+Bonus: Q29uZ3JhdHNfVGhpc19Jc190aGVfQm9udXMh
+-> Gross & Kleinbuchstaben & Ziffern
+-> Laenge 32 Zeichen
+
+Q29u Z3Jh dHNf VGhp c19J c190 aGVf Qm9u dXMh
+
+->Base64 Alphabet
+
+16 54 61 46
+25 55  9 33
+29  7 13 31
+21  6 33 41
+28 53 61  9
+28 53 61 52
+26  6 21 31
+16 38 61 46
+29 23 12 33
+
+->Bitdarstellung
+
+10000 110110 111101 101110
+11001 110111   1001 100001
+11101    111   1101  11111
+10101    110 100001 101001
+11100 110101 111101   1001
+11100 110101 111101 110100
+11010    110  10101  11111
+10000 100110 111101 101110
+11101  10111   1100 100001
+
+-> Padding: Base64 Bloecke haben 6 bits
+
+010000 110110 111101 101110 
+011001 110111 001001 100001 
+011101 000111 001101 011111 
+010101 000110 100001 101001 
+011100 110101 111101 001001 
+011100 110101 111101 110100 
+011010 000110 010101 011111 
+010000 100110 111101 101110 
+011101 010111 001100 100001
+
+-> in 8 Bit Bloecke umgruppieren
+
+01000011 01101111 01101110 
+01100111 01110010 01100001 
+01110100 01110011 01011111 
+01010100 01101000 01101001 
+01110011 01011111 01001001 
+01110011 01011111 01110100 
+01101000 01100101 01011111 
+01000010 01101111 01101110 
+01110101 01110011 00100001
+
+-> in Dezimalzahlen konvertieren
+
+ 67 111 110
+103 114  97
+116 115  95
+ 84 104 105
+115  95  73
+115  95 116
+104 101  95
+ 66 111 110
+117 115  33
+
+-> ASCII Alphabet
+
+C o n
+g r a
+t s _
+T h i
+s _ I
+s _ t
+h e _
+B o n
+u s !
+
+-> Congrats_This_Is_the_Bonus
+
+(https://en.wikipedia.org/wiki/Base64)
+
+
+
+Aufgabe 2
+
+[woodstock@snoopy ~]$ traceroute anu.edu.au 
+traceroute to anu.edu.au (130.56.67.33), 30 hops max, 60 byte packets  
+1  _gateway (192.168.1.1)  0.554 ms  0.733 ms  0.896 ms  
+2  loopback1.0006.acln.02.fra.de.net.telefonica.de (62.52.193.30)  14.110 ms  14.261 ms  14.358 ms  
+3  bundle-ether38.0002.cord.02.fra.de.net.telefonica.de (62.53.12.110)  14.817 ms  14.864 ms bundle-ether38.0001.cord.02.fra.de.net.telefonica.de (62.53.12.72)  15.042 ms  
+4  bundle-ether2.0001.corp.02.fra.de.net.telefonica.de (62.53.8.189)  14.952 ms bundle-ether1.0001.corp.02.fra.de.net.telefonica.de (62.53.8.187)  15.386 ms  15.835 ms  
+5  176.52.252.28 (176.52.252.28)  15.435 ms 176.52.252.30 (176.52.252.30)  16.871 ms  17.268 ms  
+6  94.142.107.157 (94.142.107.157)  17.787 ms 5.53.4.28 (5.53.4.28)  16.563 ms 94.142.107.157 (94.142.107.157)  17.895 ms  
+7  94.142.107.157 (94.142.107.157)  17.662 ms  13.073 ms  13.089 ms  
+8  * * AARNET-PTY.ear4.London1.Level3.net (217.163.113.74)  284.108 ms  
+9  et-0-3-0.pe1.actn.act.aarnet.net.au (113.197.15.11)  288.124 ms  290.202 ms AARNET-PTY.ear4.London1.Level3.net (217.163.113.74)  285.448 ms 
+10  et-0-3-0.pe1.actn.act.aarnet.net.au (113.197.15.11)  290.238 ms 138.44.161.3 (138.44.161.3)  301.721 ms  301.819 ms 
+11  core-te-1-1-4.anu.edu.au (150.203.201.5)  306.476 ms 138.44.161.3 (138.44.161.3)  302.948 ms  303.108 ms 
+12  core-te-1-1-4.anu.edu.au (150.203.201.5)  306.504 ms  306.573 ms  306.600 ms 
+13  vlan-2100-palo.anu.edu.au (150.203.201.33)  299.551 ms  298.947 ms anu.edu.au (130.56.67.33)  299.619 ms 
+14  anu.edu.au (130.56.67.33)  299.633 ms  298.975 ms  299.924 ms 
+15  * * * 
+16  * * * 
+17  * * * 
+
+traceroute sendet wiederholt ICMP Echo requests an den Ziel host, hier anu.edu.au
+Jedes dieser Pakete hat eine time to live (TTL), die festlegt, wie oft das Paket weitergeleitet wird.
+Jeder Router, der das Paket weiterleitet, verringert die TTL um 1 bis diese den Wert 0 erreicht und
+nicht mehr weitergeleitet, sondern verworfen wird. 
+Sobald ein Router ein Paket verwirft, sendet er eine ICMP-Antwort Typ 11: "Time exceeded" mit Code 0: 
+"Time to live exceeded in transit" an den Sender. Durch die ICMP Antwort erhaelt traceroute die IP des 
+entsprechenden Routers und gibt diese zusammen mit der Uebertragungsdauer in Millisekunden aus, z.B.
+
+1  _gateway (192.168.1.1)  0.554 ms  0.733 ms  0.896 ms 
+
+Da tracerout an jeden host 3 Pakete sendet, werden immer 3 Ruecklaufzeiten ausgegeben.
+Traceroute beginnt zunaechst mit einer TTL von 1, die den ersten Router auf dem Weg zum Zielhost 
+liefert und erhoeht fuer jeden folgenden host die TTL der Pakete um 1 bis entweder der Zielhost erreicht 
+wird oder - falls festgelegt - die maximale Anzahl an hops erreicht ist. Hier wurde der Zielhost nach 
+13 Stationen erreicht
+
+14  anu.edu.au (130.56.67.33)  299.633 ms  298.975 ms  299.924 ms 
+
+Wenn der Zielhost erreicht wurde, sendet dieser eine ICMP-Antwort Typ 0 ICMP Echo Reply (bei UDP basiertem 
+tracerout Destination Unreachable Code 3 Port Unreachable) 
+
+Die oben angegebene Folge von Adressen zeigt den Weg bis zum Zielhost anu.edu.au (130.56.67.33). Der 
+Weg hatte im Test eine Laenge von 13 und fuehrte zunaechst nach Frankfurt zu telefonica servern 
+
+2  loopback1.0006.acln.02.fra.de.net.telefonica.de (62.52.193.30)  14.110 ms  14.261 ms  14.358 ms 
+3  bundle-ether38.0002.cord.02.fra.de.net.telefonica.de (62.53.12.110)  14.817 ms  14.864 ms bundle-ether38.0001.cord.02.fra.de.net.telefonica.de (62.53.12.7> 
+4  bundle-ether2.0001.corp.02.fra.de.net.telefonica.de (62.53.8.189)  14.952 ms bundle-ether1.0001.corp.02.fra.de.net.telefonica.de (62.53.8.187)  15.386 ms > 
+5  176.52.252.28 (176.52.252.28)  15.435 ms 176.52.252.30 (176.52.252.30)  16.871 ms  17.268 ms 
+6  94.142.107.157 (94.142.107.157)  17.787 ms 5.53.4.28 (5.53.4.28)  16.563 ms 94.142.107.157 (94.142.107.157)  17.895 ms 
+7  94.142.107.157 (94.142.107.157)  17.662 ms  13.073 ms  13.089 ms
+
+von dort nach London zu Lumen Technologies UK Ltd. Servern des Australian Academic and Research Network (AARNet)
+
+8  * * AARNET-PTY.ear4.London1.Level3.net (217.163.113.74)  284.108 ms 
+
+nach Canberra zu Servern des Customer Connection Networks fuer das AARNet
+
+9  et-0-3-0.pe1.actn.act.aarnet.net.au (113.197.15.11)  288.124 ms  290.202 ms AARNET-PTY.ear4.London1.Level3.net (217.163.113.74)  285.448 ms 
+10  et-0-3-0.pe1.actn.act.aarnet.net.au (113.197.15.11)  290.238 ms 138.44.161.3 (138.44.161.3)  301.721 ms  301.819 ms 
+
+zu Servern des AARNet der Australian National University in Canberra
+
+11  core-te-1-1-4.anu.edu.au (150.203.201.5)  306.476 ms 138.44.161.3 (138.44.161.3)  302.948 ms  303.108 ms 
+12  core-te-1-1-4.anu.edu.au (150.203.201.5)  306.504 ms  306.573 ms  306.600 ms 
+13  vlan-2100-palo.anu.edu.au (150.203.201.33)  299.551 ms  298.947 ms anu.edu.au (130.56.67.33)  299.619 ms
+
+zum Zielserver
+
+14  anu.edu.au (130.56.67.33)  299.633 ms  298.975 ms  299.924 ms 
+
+Im Schnitt brauchten die pakete 300 Millisekunden bis zum Zielserver. Der Weg, den traceroute ausgibt, ist
+ein moeglicher Weg zum Zielhost. Insbesondere ist es nicht der Weg, den die Antwortpakete vom Zielhost
+nehmen.
+
+
+
+Aufgabe 3
+
+[woodstock@snoopy ~]$ sudo nmap -sS scanme.nmap.org 
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-05-13 23:09 CEST 
+Nmap scan report for scanme.nmap.org (45.33.32.156) 
+Host is up (0.25s latency). 
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f Not shown: 996 closed tcp ports (reset) 
+PORT      STATE SERVICE 
+22/tcp    open  ssh 
+80/tcp    open  http 
+9929/tcp  open  nping-echo 
+31337/tcp open  Elite 
+Nmap done: 1 IP address (1 host up) scanned in 3.67 seconds 
+
+
+[woodstock@snoopy ~]$ sudo nmap -sU scanme.nmap.org 
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-05-13 23:10 CEST 
+Nmap scan report for scanme.nmap.org (45.33.32.156) 
+Host is up (0.17s latency). 
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f Not shown: 998 closed udp ports (port-unreach) 
+PORT    STATE         SERVICE 
+68/udp  open|filtered dhcpc 
+123/udp open          ntp 
+Nmap done: 1 IP address (1 host up) scanned in 1012.29 seconds
+
+
+
+Der TCP SYN scan ist schneller, da fuer TCP einen 3Way Handshake verwendet, wobei ein 
+SYN/ACK signalisiert, dass ein PORT offen und ein RST signalisiert dass ein Port 
+geschlossen ist. Lediglich bei gefilterten Ports kann es vorkommen, dass mehrere Pakete 
+gesendet werden, ohne dass eine Antwort zurueckkommt.
+UDP verwendet hingegen keinen Handshake. Ports werden als geschlossen markiert, 
+falls sie einen "ICMP unreachable error Type 3 Code 3" zurueckliefern, und als 
+gefiltert markiert, falls sie "ICMP unreachable errors Type 3 Code 0,1,2,9,10 oder 13" 
+zurueckliefern. Schliesslich werden Ports als offen sowie z.T. als  gefiltert markiert, 
+wenn sie nach wiederholtem senden von Paketen keine Antwort zurueckliefern. Wiederholtes 
+Senden ist notwendig, um einen Verlust von Paketen auszuschliessen.
+Langsamer ist der UDP Scan dadurch, dass fuer offene / gefilterte Ports Nachrichten 
+wiederholt gesendet und auf (keine) Antwort gewartet werden muss. Problematischer ist 
+allerdings, dass viele hosts die Anzahl an "ICMP port unreachable messages" beschraenken, 
+die signalisieren, dass ein UDP port geschlossen ist. Zum Beispiel beschraenkt der 
+Linux 2.4.20 Kernel "destination unreachable messages" auf 1 pro sekunde 
+(Siehe net/ipv4/icmp.c) 
+Derartige Beschraenkungen werden von nmap automatisch erfasst und die Frequenz in der 
+UDP Anfragen geschickt werden, wird automatisch an die Beschraenkung angepasst, um zu 
+verhindern, dass das Netzwerk mit UDP Paketen ueberschwemmt wird, die der Zielrechner 
+ohnehin verwirft.
+Um  die Geschwindigkeit von UDP scans zu erhoehen, koennen mehrere Zielrechner parallel 
+gescannt werden: Mit --min-hostgroup <numhosts> und --max-hostgroup <numhosts> kann die 
+Groesse der parallel zu scannenden Gruppen bestimmt werden und mit --min-parallelism <numprobes> 
+und --max-parallelism <numprobes> kann die Anzahl der parallelen Tests festgelegt werden.
+Weiterhin kann durch --min-rtt-timeout <time>, --max-rtt-timeout <time> und 
+--initial-rtt-timeout <time> die Zeit festgelegt werden, die nmap auf Antwort eines Porttests
+wartet. Ferner kann die Anzahl der Versuche fuer einen Porttest mit --max-retries <numtries>
+festgelegt werden. Ausserdem kann mit --host-timeout <time> festgelegt werden, wann langsame 
+Zielrechner uebersprungen werden. Die Zeit die nmap zwischen zwei Porttests wartet, kann mit 
+--scan-delay <time> und--max-scan-delay <time> angepasst werden und die Scanrate, d.i. die 
+Menge an Paketen, die nmap in einer Sekunde sendet, kann direkt mit --min-rate <number> und 
+--max-rate <number> festgelegt werden. Die Anpassungen, die nmap aufgrund von Beschraenkungen
+fuer ICMP Fehlermeldungen, vornimmt, koennen mit --defeat-rst-ratelimit und 
+--defeat-icmp-ratelimit deaktiviert werden.
+Schliesslich kann zunaechst nur eine Auswahl wichtiger Ports  und nicht die gesamte 
+port range eines Zielhosts  gescannt werden.
+
+(https://nmap.org/book/man-port-scanning-techniques.html
+ https://nmap.org/book/man-performance.html)

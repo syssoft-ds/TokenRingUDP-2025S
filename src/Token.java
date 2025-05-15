@@ -8,10 +8,13 @@ import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Deque;
 
 public class Token {
 
     private static final int max_buffer_size = 4096;
+    protected static Endpoint last;
+
 
     public record Endpoint(String ip, int port) {}
 
@@ -21,15 +24,39 @@ public class Token {
     }
 
     public Token append(Endpoint endpoint) {
-        ring.offer(endpoint);
+        ring.offer(endpoint);                   // adds endpoint to the tail of the LL
         return this;
     }
+
+    public Endpoint drop(){
+
+        /** removes the last element from the ring */
+
+        try{
+            return ((Deque<Endpoint>) ring).pollLast();
+        } catch (Exception e){ 
+            System.out.println("ring is not a queue.");
+            return null;
+        }
+    }
+
+/*      public Endpoint last() {
+
+        // peeks the last element of the ring
+
+        try{
+            return ((Deque<Endpoint>)ring).peekLast();
+        } catch (Exception e){
+            System.out.println("ring is not a queue");
+            return null;
+        }
+    } */
 
     public Endpoint first() {
         return ring.peek();
     }
 
-    public Endpoint poll() {
+    public Endpoint poll() {                    // retrieves and removes the head of the LL
         return ring.poll();
     }
 
@@ -70,6 +97,7 @@ public class Token {
         s.receive(packet);
         String rc_json = new String(packet.getData(),0,packet.getLength(), StandardCharsets.UTF_8);
         System.out.printf("Received %s from %s:%d\n", rc_json, packet.getAddress().getHostAddress(), packet.getPort());
+        last = new Endpoint(packet.getAddress().getHostAddress(), packet.getPort());
         return fromJSON(rc_json);
     }
 
@@ -88,5 +116,27 @@ public class Token {
 
     public static Token fromJSON(String json) throws IOException {
         return serializer.readValue(json, Token.class);
+    }
+
+    public void sendReceipt(DatagramSocket socket, Token.Endpoint previous) throws IOException{
+        
+        // send a receipt signalling a package arrived
+
+        String rc_json = toJSON();
+        byte[] rc_json_bytes = rc_json.getBytes(StandardCharsets.UTF_8);
+        InetAddress address = InetAddress.getByName(previous.ip());
+        DatagramPacket packet = new DatagramPacket(rc_json_bytes, rc_json_bytes.length, address, previous.port());
+        System.out.println("ping");
+        socket.send(packet);
+    }
+
+    public static void receiveReceipt(DatagramSocket socket) throws IOException{
+
+        // receives a receipt for a package
+
+        byte[] buf = new byte[1024];
+        DatagramPacket packet = new DatagramPacket(buf, buf.length);
+        socket.receive(packet);
+        System.out.println("pong");
     }
 }

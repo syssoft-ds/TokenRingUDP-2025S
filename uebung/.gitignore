@@ -1,0 +1,8 @@
+### Latex ###
+
+*.aux
+*.log
+*.synctex.gz
+*.tex
+
+/blatt_1
