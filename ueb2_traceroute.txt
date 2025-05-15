@@ -1,0 +1,46 @@
+tracert www.anu.edu.au
+
+Routenverfolgung zu terra-web.anu.edu.au [130.56.67.33]
+über maximal 30 Hops:
+
+  1     8 ms     8 ms     7 ms  kabelbox [192.168.0.1]
+  2    21 ms    24 ms    20 ms  ip53a9b744.static.kabel-deutschland.de [83.169.183.68]
+  3    25 ms    24 ms    19 ms  ip5886c96d.static.kabel-deutschland.de [88.134.201.109]
+  4    17 ms    16 ms    21 ms  145.254.3.168
+  5    22 ms    19 ms    20 ms  145.254.2.207
+  6     *       20 ms    19 ms  de-cix.fra.zayo.com [80.81.192.255]
+  7   157 ms   155 ms   156 ms  ae1.cs1.fra6.de.eth.zayo.com [64.125.29.56]
+  8     *        *        *     Zeitüberschreitung der Anforderung.
+  9     *        *        *     Zeitüberschreitung der Anforderung.
+ 10     *        *        *     Zeitüberschreitung der Anforderung.
+ 11     *        *        *     Zeitüberschreitung der Anforderung.
+ 12     *        *        *     Zeitüberschreitung der Anforderung.
+ 13     *        *        *     Zeitüberschreitung der Anforderung.
+ 14     *        *        *     Zeitüberschreitung der Anforderung.
+ 15     *        *        *     Zeitüberschreitung der Anforderung.
+ 16     *        *        *     Zeitüberschreitung der Anforderung.
+ 17     *        *        *     Zeitüberschreitung der Anforderung.
+ 18   153 ms   155 ms     *     ae27.mpr1.sea1.us.zip.zayo.com [64.125.29.1]
+ 19   156 ms   155 ms   150 ms  64.125.193.130.i223.above.net [64.125.193.130]
+ 20   296 ms   293 ms   292 ms  et-10-0-5.170.pe1.brwy.nsw.aarnet.net.au [113.197.15.62]
+ 21   295 ms   293 ms   293 ms  et-1-1-0.pe1.rsby.nsw.aarnet.net.au [113.197.15.12]
+ 22   294 ms   295 ms   295 ms  et-0-3-0.pe1.actn.act.aarnet.net.au [113.197.15.11]
+ 23     *        *        *     Zeitüberschreitung der Anforderung.
+ 24     *        *        *     Zeitüberschreitung der Anforderung.
+ 25     *        *        *     Zeitüberschreitung der Anforderung.
+ 26     *        *        *     Zeitüberschreitung der Anforderung.
+ 27     *        *        *     Zeitüberschreitung der Anforderung.
+ 28     *        *        *     Zeitüberschreitung der Anforderung.
+ 29     *        *        *     Zeitüberschreitung der Anforderung.
+ 30     *        *        *     Zeitüberschreitung der Anforderung.
+
+Ablaufverfolgung beendet.
+
+Hop 1-5: Die Ausgabe zeigt zuerst lokale Router meines Providers Kabel Deutschland, obwohl schon Vodafone sein sollte. 
+Hop 6-7: Der Übergang über das DE-CIX-Internetknoten in Frankfurt (Zayo). 
+Hop 8-17: Einige Zwischenrouter antworten nicht, vielleicht wegen der Sicherheitsgründen.
+Hop 18-19: Immer noch Zayo, aber schon in USA, Seattle. (AboveNet gehört zu Zayo)
+Hop 20-22: Wir haben Router von AARNet (Australian Academic and Research Network) erreicht. Zuerst in Burwood (brwy), dann Rosebery (rsby) und endlich Australian Capital Territory (act), wo sich die Uni befindet.
+Ab Hop 23 erhalen wir keine Antwort, wahrscheinlich auch wegen der Sicherheitsgründen.  
+
+Insgesamt zeigt Traceroute, wie Datenpakete über mehrere Netzwerke und Kontinente hinweg ihr Ziel erreichen.

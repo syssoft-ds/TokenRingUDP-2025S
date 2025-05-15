@@ -73,6 +73,10 @@ public class Token {
         return fromJSON(rc_json);
     }
 
+    public void remove(Endpoint endpoint) {
+        ring.removeIf(e -> e.ip().equals(endpoint.ip()) && e.port() == endpoint.port());
+    }
+
     @JsonProperty
     private final Queue<Endpoint> ring = new LinkedList<>();
 

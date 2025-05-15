@@ -33,7 +33,31 @@ public class TokenRing {
                 rc.append(next);
                 rc.incrementSequence();
                 Thread.sleep(1000);
-                rc.send(socket, next);
+                //rc.send(socket, next);
+
+                boolean sent = false;
+                int versuch = 0;
+                while (!sent && versuch < 3) {
+                    try {
+                        rc.send(socket, next);
+                        sent = true;
+                    } catch (IOException e) {
+                        versuch++;
+                        System.out.printf("Failed to send to (%s, %d), attempt %d\n", next.ip(), next.port(), versuch);
+                        Thread.sleep(500); // warten und nochmal versuchen
+                    }
+                }
+
+                if (!sent) {
+                    System.out.printf("Remove unresponsive node: (%s, %d)\n", next.ip(), next.port());
+                    rc.remove(next);
+                }
+
+                if (rc.length() == 0) {
+                    System.out.println("Ring is empty.");
+                    break;
+                }
+                
             }
             catch (IOException e) {
                 System.out.println("Error receiving packet: " + e.getMessage());

@@ -1,0 +1,7 @@
+1) First clue: Find the password
+tcp contains "password"
+2) The next clue: One HTTP error id different
+http oder http.response.code (mit dem zweiten Filter konnte ich den Suchfeld ein bisschen reduzieren)
+3) The next clue: Hiddeninping
+icmp
+Bonus: Die finale Zeichenkette ist eine Kodierung des Satzes "Congrats_This_Is_the_Bonus!"

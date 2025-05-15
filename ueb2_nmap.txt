@@ -1,0 +1,76 @@
+Ausgabe von „nmap -sU scanme.nmap.org“:
+
+Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-13 09:18 Mitteleuropaische Sommerzeit   
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.18s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 868 closed udp ports (port-unreach), 127 open|filtered udp ports (no-response)
+PORT      STATE    SERVICE
+123/udp   open     ntp
+1718/udp  filtered h225gatedisc
+25240/udp filtered unknown
+31059/udp filtered unknown
+49185/udp filtered unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 1608.36 seconds
+
+Ausgabe von „nmap -sS scanme.nmap.org“:
+
+Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-13 09:20 Mitteleuropaische Sommerzeit   
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.17s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 996 closed tcp ports (reset)
+PORT      STATE SERVICE
+22/tcp    open  ssh
+80/tcp    open  http
+9929/tcp  open  nping-echo
+31337/tcp open  Elite
+
+Nmap done: 1 IP address (1 host up) scanned in 3.12 seconds
+
+Beobachtungen: 
+Der Scan mit nmap -sS war sehr schnell im Vergleich zum Scan mit nmap -sU (hier mehr als 20 Minuten).
+Der Grund dafür liegt in den Unterschieden zwischen den Protokollen TCP und UDP.
+TCP ist verbindungsorientiert und liefert eine schnelle Antwort. Wenn ein Port geschlossen ist, kommt ein Reset.
+UDP ist verbindungslos. Bei UDP gibt es oft keine Antwort bei offenen Ports, was zu langen Timeouts führt.
+Viele Firewalls blockieren die Antworten, daher der Status open|filtered.
+
+Möglichkeiten, den Scan schneller durchzuführen:
+1. Top-Ports begrenzen
+nmap -sU --top-ports 50 scanme.nmap.org
+Nmap scannt nur die 50 am häufigsten verwendeten Ports, was die Gesamtzeit deutlich reduziert.
+
+Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-13 09:38 Mitteleuropaische Sommerzeit   
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.17s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 44 closed udp ports (port-unreach)
+PORT     STATE         SERVICE
+68/udp   open|filtered dhcpc
+123/udp  open          ntp
+135/udp  filtered      msrpc
+1026/udp filtered      win-rpc
+1433/udp filtered      ms-sql-s
+1900/udp filtered      upnp
+
+Nmap done: 1 IP address (1 host up) scanned in 63.38 seconds
+
+2.Paket-Rate erhöhen
+nmap -sU --min-rate 1000 scanme.nmap.org
+
+Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-13 09:30 Mitteleuropaische Sommerzeit   
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.019s latency).
+Other addresses for scanme.nmap.org (not scanned): 2600:3c01::f03c:91ff:fe18:bb2f
+Not shown: 994 filtered udp ports (admin-prohibited)
+PORT      STATE  SERVICE
+123/udp   open   ntp
+1034/udp  closed activesync-notify
+20842/udp closed unknown
+34579/udp closed unknown
+48489/udp closed unknown
+49198/udp closed unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 5.68 seconds
+
