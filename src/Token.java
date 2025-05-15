@@ -37,6 +37,12 @@ public class Token {
         return ring.size();
     }
 
+    public void removeTail () {
+        if (!ring.isEmpty()) {
+            ((LinkedList<Endpoint>) ring).removeLast();
+        }
+    }
+
     private int sequence = 0;
 
     public int getSequence() {

@@ -5,14 +5,25 @@ import java.util.LinkedList;
 
 public class TokenRing {
 
-    private static void loop(DatagramSocket socket, String ip, int port, boolean first){
+    private static void loop(DatagramSocket socket, String ip, int port, boolean first) throws SocketException {
         LinkedList<Token.Endpoint> candidates = new LinkedList<>();
         if (first) {
             candidates.add(new Token.Endpoint(ip, port));
         }
+        Token tmp_rc = null;
+        socket.setSoTimeout(10000);
         while (true) {
             try {
-                Token rc = Token.receive(socket);
+                Token rc;
+                try {
+                    rc = Token.receive(socket);
+                    if (tmp_rc != null && rc.length() != 1 && rc.getSequence() < tmp_rc.getSequence()) continue;
+                    tmp_rc = rc;
+                } catch (SocketTimeoutException e) {
+                    if (tmp_rc == null) continue;
+                    rc = tmp_rc;
+                    rc.removeTail();
+                }
                 System.out.printf("Token: seq=%d, #members=%d", rc.getSequence(), rc.length());
                 for (Token.Endpoint endpoint : rc.getRing()) {
                     System.out.printf(" (%s, %d)", endpoint.ip(), endpoint.port());
