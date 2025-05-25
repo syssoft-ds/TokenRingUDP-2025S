@@ -34,6 +34,32 @@ public class TokenRing {
                 rc.incrementSequence();
                 Thread.sleep(1000);
                 rc.send(socket, next);
+
+                boolean sent = false;
+                int maxRetries = 3;
+                for (int i = 0; i < maxRetries && !sent; i++) {
+                    try {
+                        rc.send(socket, next);
+                        sent = true;
+                    } catch (IOException e) {
+                        System.out.printf("Failed to sent to %s:%d – Take: %d/%d\n",
+                                next.ip(), next.port(), i + 1, maxRetries);
+                        Thread.sleep(500);
+                    }
+                }
+                //Hier wird eine maximale Anzahl von Versuchen definiert, um einen bestimmten Knoten zu erreichen.
+                //Wenn es scheitert, soll der entsprechende Endpoint aus der Queue im nächsten Schritt gelöscht werde
+                if (!sent) {
+                    System.out.printf("Token %s:%d removed!\n", next.ip(), next.port());
+                    rc.removeEndpoint(next);
+
+                    if (rc.length() == 0) {
+                        System.out.println("No more Tokens found.");
+                        break;
+                    }
+                    continue;
+                }
+
             }
             catch (IOException e) {
                 System.out.println("Error receiving packet: " + e.getMessage());

@@ -1,0 +1,35 @@
+Aufgabe1
+
+Erster Clue: dzh20szq gefunden mit tcp contains "password"
+
+Zweiter Clue: ra6rgv7h gefunden mit http und dann auf Errors geachtet
+
+Dritter Clue: nd7hark3 gefunden mit icmp
+
+Lösungscode: Q29uZ3JhdHNfVGhpc19Jc190aGVfQm9udXMh mit Base64Guru decodiert: Congrats_This_Is_the_Bonus!
+
+Aufgabe2
+
+Tracert gab mir die Route zu Google.de in nur 8 Hops zurück, es wurden vor allem IP-Adressen angezeigt, nur wenige Stationen waren mit Hostnamen aufgelöst.
+Die Route zu uni-trier.de wurde in 14 Hops angezeigt.
+Dabei hat jede Station, die auf dem Weg zur Webseite lag eine Antwort zurückgegeben und es wurde angezeigt, um welche Station es sich handelt.
+Z.B. ganz am Anfang die Digibox selbst als Router, rlp-net.net häufig unter verschiedenen Stationen bis letztendlich uni-trier.de abgebildet wurde, Google.de wurde am Ende des Routings nicht explizit aufgezeichnet.
+
+Die Traceroute zu anu.edu.au war deutlich komplexer und wurde nicht vollständig angezeigt.
+Es wurden nur die ersten 8 Hops angezeigt, alle anderen Stationen haben entweder nicht geantwortet oder wurde aufgrund Zeitüberschreitung abgebrochen.
+Die Routenverfolgung lief auch nicht über die gesuchte Webseite selbst sondern brachte noch ein Anhängsel terra-web dazu, vermutlich da sich das gesuchte Netzwerk außerhalb von Deutschland befindet.
+Auffällig war auch die Antwort eines Servers in London, was nicht auf direktem bzw. kürzesten Weg zu Australien liegt.
+Die Traceroute Funktion bildet mehr oder weniger denselben Weg ab, den der Browser zur Zieldomäne durchläuft.
+
+Aufgabe3
+
+der TCP-Scan ist innerhalb weniger Minuten abgeschlossen. Dieser hat mir 4 verschiedene, offene TCP Ports gezeigt bzw. geliefert.
+Der UDP-Scan lief deutlich länger, dieser war erst nach mehr als 15 Minuten beendet und hat mir 2 UDP Ports geliefert.
+Einer von beiden war offen und der andere Port wird als open|filtered gekennzeichnet. 
+
+Laut der offiziellen Nmap-Doku sind UDP-Scans generell langsamer da anders als beim TCP-Scans immer auf das timeout der Ports gewartet werden muss,
+da diese anders als bei TCP direkt eine Rückmeldung geben. 
+Um die UDP-Scans zu beschleunigen, könnte man laut der Doku mehrere Hosts parallel scannen,
+zuerst nur einen schnellen Scan der beliebten Ports durchführen, von hinter der Firewall scannen
+und die Option --host-timeout benutzen, um langsame Hosts auszulassen.
+siehe: https://nmap.org/man/de/man-port-scanning-techniques.html
