@@ -1,3 +1,5 @@
+package ueb_01;
+
 import java.io.IOException;
 import java.net.*;
 import java.util.LinkedList;
@@ -13,7 +15,7 @@ public class TokenRing {
         while (true) {
             try {
                 Token rc = Token.receive(socket);
-                System.out.printf("Token: seq=%d, #members=%d", rc.getSequence(), rc.length());
+                System.out.printf("ueb_01.Token: seq=%d, #members=%d", rc.getSequence(), rc.length());
                 for (Token.Endpoint endpoint : rc.getRing()) {
                     System.out.printf(" (%s, %d)", endpoint.ip(), endpoint.port());
                 }
@@ -60,7 +62,7 @@ public class TokenRing {
                 loop(socket,ip,port,false);
             }
             else {
-                System.out.println("Usage: \"java TokenRing\" or \"java TokenRing <ip> <port>\"");
+                System.out.println("Usage: \"java ueb_01.TokenRing\" or \"java ueb_01.TokenRing <ip> <port>\"");
             }
         }
         catch (SocketException e) {
