@@ -1,4 +1,2 @@
 Manifest-Version: 1.0
 Main-Class: ueb_01.TokenRing
-Main-Class: ueb_03.Main_TCP
-Main-Class: ueb_03.Main_UDP
