@@ -1,0 +1,26 @@
+Aufgabe01:
+
+UDP: Wenn ich den Code so verändere, dass mein Listener ankommende Nachrichten an alle Teilnehmer weiterleitet, welche nicht der Absender sind, kann ich dafür sorgen, dass eine Unterhaltung stattfinden kann. Da aber über einen Client der Server läuft, wird die gesamte Nachrichtenaufnahme und Weiterleitung unterbrochen, sobald ein Teilnehmer "stop" eingibt. Ein Teilnehmer kann so die Unterhaltung für alle beenden. Dies wäre nur sinnvoll, wenn es eine Kommunikation zwischen zwei Personen handelt. Wenn eine Person das Gespräch beendet, hat die andere Person sowieso niemanden mehr, um die Nachrichten zu empfangen und zu antworten. 
+
+TCP: Analog zu UDP mit dem Unterschied, dass hier ein Teilnehmer bei "stop" lediglich sich selbst von der Unterhaltung entfernt, alle anderen Teilnehmer weiterhin miteinander kommunizieren können. Jetzt ist natürlich die Frage, ob ein neuer Teilnehmer zusätzlich auch alle bisher geschriebenen Nachrichten lesen können soll, wenn die Verbindung zum Server noch nicht gleichzeitig von allen beendet wurde, die Unterhaltung also noch weitergeht.
+
+Mir werden beim TCP traffic zusätzlich neue Verbindungen eingegraut angezeigt. Zusätzlich zeigt mir TCP auch die Handschlagflags an. Hier macht mir TCP die Implementierung eines Chatsystems es glaube ich einfacher, da ich die Ausgabe direkt nach einem Verbindungstrennung, Datenerhalt und Datenweiterleitung filtern kann. Ob das so funktioniert, sehe ich dann in den nächsten zwei Aufgaben.
+
+Aufgabe02:
+Ich hatte einige Probleme dabei, die Chatfunktion bei UDP dahingehend zu erweitern, dass die Teilnehmer ihre "Privatnachrichten" auch sehen. bzw. fehlt mir (stand jetzt) auch die Funktion, dass die Chatteilnehmer die Chatnachrichten sehen können. Ich könnte auch hier die <s.recieve(p)> bestimmt weiterleiten über <s.send(p)>, allerdings komme ich dann wieder zu meinem Problem, dass ich den Teilnehmern aktuell den Chat nicht anzeigen lassen kann.
+
+1 Tag später:
+Ich habe jetzt verstanden, was eigentlich gefordert wurde und wie UDP und TCP sich tatsächlich unterscheiden. Ich muss eigentlich dafür sorgen, dass bei UDP die "Registrierungsnachricht" bei allen bisherigen Teilnehmern zum Listener an alle Teilnehmer einmal geschickt wird, sodass diese Zugriff auf alle Kontakte bekommen und diese dann selbst kontaktieren können. Erst dann kommt die Problematik, wie ich mit Threads arbeite, um ein paralleles senden und empfangen zu ermöglichen. Stand jetzt habe ich das aber noch nicht umgesetzt, ich habe mich schon sehr mit der Aufgabe 2 beschäftigt, ich mache jetzt erstmal mit den anderen Aufgaben weiter.
+
+Aufgabe03:
+Da ich zugeben muss, dass ich erst 2 Tage vor Abgabenende dazu gekommen bin die Übung zu beginnen, habe ich etwas Zeitstres gehabt. das Programm ist jetzt zu großen teilen von GPT generiert worden, da ich keine Zeit zum eigenen Knoblen mehr hatte. Ich habe mich mit dem Code beschäftigt und verstehe größtenteils, was im Code passiert, ich finde es aktuell nur schwierig, allen verweisen folgen zu können.
+
+Aufgabe 4:
+
+Bitfolge: 0110101
+Clock: negative Taktflanke
+Manchester Code nach Thomas:
+       _            _
+mit 0:  |_ und 1: _|
+_    _   __    __    _
+ |__| |_|  |__|  |__|

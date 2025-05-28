@@ -6,8 +6,12 @@ import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 public class Main {
+
+    public static ArrayList<String> Kontakte = new ArrayList<>();
+    public static ArrayList<Integer> Ports = new ArrayList<>();
 
     private static void fatal ( String comment ) {
         System.out.println(comment);
@@ -18,13 +22,17 @@ public class Main {
     // MAIN
     // ************************************************************************
     public static void main(String[] args) throws IOException {
-        if (args.length != 2)
-            fatal("Usage: \"<netcat> -l <port>\" or \"netcat <ip> <port>\"");
+        if (args.length != 3 && args.length != 2)
+            fatal("Usage: \"<netcat> -l <port> \" or \"netcat <ip> <port> <name>\"");
         int port = Integer.parseInt(args[1]);
+        String name = null;
+        if (args.length == 3){
+            name = args[2];
+        }
         if (args[0].equalsIgnoreCase("-l"))
             listenAndTalk(port);
         else
-            connectAndTalk(args[0],port);
+            connectAndTalk(args[0],port, name);
     }
 
     private static final int packetSize = 4096;
@@ -48,17 +56,45 @@ public class Main {
     // ************************************************************************
     // connectAndTalk
     // ************************************************************************
-    private static void connectAndTalk ( String other_host, int other_port ) throws IOException {
+    private static void connectAndTalk ( String other_host, int other_port , String name) throws IOException {
         InetAddress other_address = InetAddress.getByName(other_host);
         DatagramSocket s = new DatagramSocket();
         byte[] buffer = new byte[packetSize];
         String line;
+        //Vorstellung eines neuen Teilnehmers
+        line = "Hallo hier ist " + name + ", meine IP-Adresse ist 127.0.0.1 und du kannst mich unter Port-Nummer " + s.getLocalPort() + " erreichen.";
+        Kontakte.add(name);
+        Ports.add(s.getLocalPort());
+        buffer = line.getBytes("UTF-8");
+        DatagramPacket hello = new DatagramPacket(buffer,buffer.length,other_address,other_port);
+        s.send(hello);
+        //-----------------------------------
         do {
-            line = readString();
-            buffer = line.getBytes("UTF-8");
-            DatagramPacket p = new DatagramPacket(buffer,buffer.length,other_address,other_port);
-            s.send(p);
-        } while (!line.equalsIgnoreCase("stop"));
+            line = name + ": " +readString();
+            //falls eine Nachricht gesendet werden soll
+            if(line.startsWith(name + ": send")){
+                line = line.substring(name.length()+5);
+                String partner = line.substring(0,line.indexOf(" "));
+                String message = line.substring(line.indexOf(" ")+1);
+                if(Kontakte.contains(partner)){
+                    buffer = message.getBytes("UTF-8");
+                    DatagramPacket p = new DatagramPacket(buffer,buffer.length,other_address,Ports.get(Kontakte.indexOf(partner)));
+                    s.send(p);
+                }
+            }
+            //------------------------------------------
+            else{
+                buffer = line.getBytes("UTF-8");
+                DatagramPacket p = new DatagramPacket(buffer,buffer.length,other_address,other_port);
+                s.send(p);
+            }
+        } while (!line.equalsIgnoreCase(name + ": stop"));
+        //Person verläst den Chat
+        line = name + " has left";
+        buffer = line.getBytes("UTF-8");
+        DatagramPacket p = new DatagramPacket(buffer,buffer.length,other_address,other_port);
+        s.send(p);
+        //-----------------------
         s.close();
     }
 
