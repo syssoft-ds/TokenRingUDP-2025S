@@ -1,0 +1,62 @@
+Aufgabe01:
+
+IPv4:
+| Version: 4 | IHL: 24 Byte | 0x00 | Total length: 32 |
+| ID: 0x8cca (36042) | Flags: 000 | Fragment Offset: 0 0000 0000 0000 | 
+| TTL: 1 |  Protocol: IGMP (2) | Header Checksum: 0x0000 |
+| Source: 192.168.178.29 |
+| Destination: 239.255.255.250 |
+
+UDP:
+| Version: 4 | IHL: 20 Byte | 0x00 | Total length: 350 |
+| ID: 0x309d (12445) | Flags: 000 | Fragment Offset: 0 0000 0000 0000 | 
+| TTL: 128 |  Protocol: UDP (17) | Header Checksum: 0x0000 |
+| Source: 0.0.0.0 |
+| Destination: 255.255.255.255 |
+
+
+TCP:
+| Version: 4 | IHL: 20 Byte | 0x00 | Total length: 41 |
+| ID: 0x4de5 (19941) | Flags: 010 | Fragment Offset: 0 0000 0000 0000 | 
+| TTL: 128 |  Protocol: TCP (6) | Header Checksum: 0x0000 |
+| Source: 127.0.0.1 |
+| Destination: 127.0.0.1 |
+
+
+Aufgabe02:
+
+103.161.122.83 ist unsere IP Adresse, /18 sagt aus, dass die ersten 18 Bits den Netzanteil darstellen, die restlichen 14 Bits sind der Hostanteil
+
+Man kann Subnetzmaske, Brodcastadresse und Netzwerkadresse folgendermaßen berechnen:
+
+Subnetzmaske: ersten 18 Bits sind 1, die anderen 14 Bits sind 0.
+
+Maske: 11111111.11111111.11000000.00000000 (255.255.192.0)
+
+Netzwerkadresse: Bitweise Logisch IP Adresse und Subnetzmaske verknüpfen
+
+IP:              01100111.10100001.01111010.01010011
+Maske:           11111111.11111111.11000000.00000000
+Netzwerkadresse: 01100111.10100001.01000000.00000000 (103.161.64.0)
+
+Brodcastadresse: höchste Adresse im Subnetz, alle Hostbits auf 1 setzen
+
+Netzwerkadresse: 01100111.10100001.01000000.00000000
+Hostbits: 14 =   01100111.10100001.01111111.11111111
+Brodcastadresse: 103.161.127.255
+
+Fazit: alle IP-Adressen von 103.161.64.0 bis 103.161.127.255 liegen im selben Netz
+
+Netzadresse von: 103.161.193.83/18
+IP:              01100111.10100001.11000001.01010011
+Maske:           11111111.11111111.11000000.00000000
+Netzwerkadresse: 01100111.10100001.11000000.00000000 (103.161.192.0)
+
+(103.161.64.0) und (103.161.192.0) liegen nicht im selben Netz...
+
+Aufgabe03:
+
+Da ich hier wieder spät mit der Ünbung angefangen habe, habe ich die Musterlösung auf zwei Rechnern laufen lassen. Ich hatte eigentlich keine Probleme, weswegen ich mir den Code einfach mal angesehen habe. Ich hatte keinen Code gefunden, welcher dafür sorgt, Clients wieder zu entfernen. mit Ki ist dann auch rausgekommen, dass ein Problem sein könnte, dass Namenskonflikte stattfinden können, wenn mehrere Personen den gleichen Namen haben. Da ich mit Alice, Bob, Charlie etc. arbeite, passiert das hier natürlich nicht. Insgesamt muss man darauf achten, dass die Implementierungen miteinander interagieren können, ist die Reihenfolge der Daten bei allen identisch, oder schickt jemand den port vor dem Namen? solange man aber auf solche Unterschiede achtet, bzw. diese verbessert, sollte kein großes Problem entstehen. Hat eine Person aber einen fehlerhaften Code, welcher beim Server eine IO Exception auslösen würde, wird der gesamte Server beendet, was nicht zielführend wäre.
+
+Aufgabe04:
+Ich habe soweit alle Aufgaben verstanden und umgesetzt, aber die 4e) habe ich dann zusammen mit KI erstellt, da ich hier nicht merh ganz nachvollziehen konnte, was gefragt war. 
