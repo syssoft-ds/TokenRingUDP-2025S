@@ -1,0 +1,57 @@
+Aufgabe01:
+Sliding-Window:
+Wie der Name schon sagt, läuft durch das Sliding-Window etwas durch. Dabei handelt es sich um Pakete eines Senders, dessen Empfang zuerst vom Empfänger bestätigt werden muss, um einen Paketverlust zu melden. Damit dabei aber nicht zu viele Pakete gesendet werden und die Ressourcenverwendung nicht zu extrem wird, ist die größe des Sliding-Windows begrenzt. Erst wenn ein Paket erfolgreich quittiert wurde, dem Sender also mitgeteilt werden konnte, dass das Paket fehlerfrei erhalten wurde, kann ein weiteres Paket das Sliding-Window betreten. Prinzipiell kann man sich das Sliding-Window wie eine Queue mit begrenztem Speicher vorstellen, welche bei einer Menge von 0 freien Speicherplätzen die neuen Pakete so lange gesendet bekommt, bis ein Speicherort für das neue Paket frei wird, indem ein anderes quittiert wurde. 
+
+Bei den folgenden drei TCP Protokollen ist das Ziel überall identisch: Das Netzwerk soll nie so volllaufen, dass alles verloren geht. Die drei Protokolle gehen mit unterschiedlichen Methoden an die Problemlösung heran.
+
+TCP Tahoe:
+Das Protokoll beginnt bei einer Sliding-Window-Größe von 1 und verdoppelt die Größe pro erfolgreich gesendetem Paket. Wenn das Protokoll bemerkt, dass Quittierungen ausbleiben, oder ein Paket zu lange nicht bestätigt wurde, versteht das Protokoll dies als Verlust eines Paketes an. Dann wird die Window-Sliding-Größe auf 1 gesetzt, und das Protokoll startet von vorne. 
+
+TCP Reno:
+Wenn das Protokoll wiederholt den gleichen ACK erhält, der Empfänger ein Paket verloren hat, aber weiterhin welche erhält, schickt das Protokoll das vermisste Paket sofort nochmal und halbiert die SWG. Dadurch läuft das Protokoll zwar langsamer, beginnt aber nicht immer von vorne, wie bei Tahoe der Fall.
+
+TCP Vegas:
+Das Protokoll vergleicht hier die Übertragungsrate. Wie schnell sollte ein Paket übertragen werden, wie lange dauert es tatsächlich? so kann das Protokoll vor einem Paketverlust die SWG verkleinern, bevor ein Paketverlust auftritt.
+
+Protokoll | OSI-Schicht | Begründung
+
+HTTP/HTTPS | 7 | Ist die Schnittstelle zur Software
+SMTP / POP / IMAP  | 7 | Ist ein email Protokoll, näher an Anwendung geht nicht
+DNS | 7 | ist wie ein Telefonbuch für Computeradressen, fungiert als Übersetzer, aber als Software, nicht als Darstellung
+SSH | 7 | eine Anwendung
+DHCP | 7 | eine Konfiguration
+TCP | 4 | sorgt für Datenübertragung
+UDP | 4 | sorgt für Datenübertragung
+NAT | 3 | IP-Adressen Übersetzung an Routern -> Netzschicht
+ICMP | 3 | Anwendung auf Netzwerkebene (zur Netzwerkdiagnose)
+IP | 3 | Routing/Inhalt für das Netzwerk
+Ethernet | 2 | Medienzugriff auf geteiltem Bus
+PHY-Standards | 1 | Eleektrische/Optische Signale (Spannung, Leitung)
+
+Aufgabe02:
+a) 20 Hosts. Ich habe nmap -sn "eigene IP Adresse"/24 verwendet. -sn Pingscant alle Hosts im Netzwerk, und gibt aus, wie viele antworten. 
+b) Linux. ich habe nmap -O scanme.nmap.org genutzt. Der Befehl -O steht für OS Detection und versucht, das Betriebssystem zu ermitteln.
+c) die c habe ich nicht geschafft. Ich habe nslookup nmap.org versucht, habe dadurch zwar die IP-Adresse erhalten, aber habe nach Insallation und Ausführung von whois.exe auch in CMD nicht whois ausführen können.
+d) nmap -p -1024 -T4 --open "eigene IP-Adresse"/24. mit --open sollen nur offene Ports angezeigt werden, mit -p -1024 prüfe ich nur Standardports und -T4 sorgt für einen schnelleren Modus.
+e) mit nmap -sS "eigene IP-Adresse". dieser schickt ein SYN Paket, wartet auch dass ACk und antwortet dann nicht. So erkennt man schneller offene Ports, ohne eine vollständige Verbindung aufbauen zu müssen. Ist schneller, und schwerer für Firewalls zu erkennen.
+f) 139 taucht so gut wie immer auf. Diese sind für Windows freigaben verwendet.
+Aufgabe03:
+Es gibt vier DHCP-Pakete. Discover, Offer, Request und ACK. D = Client sucht nach einem DHCP Server, O = ein Server antwortet mit einem IP-Angebot, R = Der Client fordert diese bestimmte Adresse an, A = Der Server bestätigt die Zuweisung der IP-Adresse. Indem ich mein WLAN mit Wireshark mitschneide und in CMD ipconfig /Renew verwende, werden mir 2 der 4 Pakete, Request und ACK angezeigt. In Request finde ich viele Informationen zu meinem Gerät selbst. In ACK finde ich viel zu meinem Verbindungsweg. Mit dem Zusatzbefehl ipconfig /release habe ichn un alle 4 Pakete gefunden. Release gibt mir einige Infos zu meinen neuen Adressen. Discover legt mir Systeminterne Informationen dar.
+Aufgabe04:
+Während der Initialisierung speichern alle Knoten ihre Kantenkosten zu ihren Nachbarn und wählen dabei immer den kürzesten Weg. Während der Initialisierung umfassen die gespeicherten Kantenkosten nur die direkt an den Knoten liegenden Kanten. Danach wird die Liste aktualisiert, Indem die Knoten allen direkten Nachbarn ihre eigene Kostentabelle übertragen. So erhält Knoten D Informationen dazu, wie hoch die Kosten von D über C, zu allen mit C verbundenen Kanten zu den verbundenen Knoten ist. Sollte eine neue Strecke, oder eine alte, aber kostengünstigere Strecke berechnet werden, wird diese in den Listen überschrieben. Sind alle Pfade zu einem Knoten gefunden und berechnet worden, werden die Kantenkosten grün markiert und somit als günstigster Weg festgelegt. Die Aktualisierung wird so oft wiederholt, bis sich keine Werte mehr ändern.
+
+Algorithmus in Worten:
+Sende (Kostentabelle) an alle Nachbarn
+Empfange (Kostentabelle) aller Nachbarn
+für jede Kostentabelle:
+berechne und speichere kleinere Streckenkosten
+(aktueller weg > weg von zu über...) -> alter Weg = neuer Weg
+Prüfe(bekanntes Netzwerk)
+-> überprüft, ob weitere Wege zu bel. Knoten existieren
+wenn nicht: Tabelleneintrag grün färben
+wenn alle Felder grün:
+beenden.
+
+a) Kostengünstigster Weg von "z" zu "x": 3.
+b) Ja, Kostengünstigster Weg von "z" zu "x": 7.
+c) Sobald D ausfällt, dauert es n Aktualisierungen für jeden Router, mit n = Kanten von Router D zu Router X. Hier: n(c) = 1, n(b) = 2, n(a) = 2.
